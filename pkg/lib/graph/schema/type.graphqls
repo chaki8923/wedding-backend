@@ -1,0 +1,26 @@
+type Message {
+  id: ID!
+  text: String!
+  user: User!
+  created_at: String!
+  updated_at: String!
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  password: String!
+}
+
+type Invitation {
+  id: ID!
+  title: String!
+  event_date: String!
+  place: String!
+  comment: String!
+  file_url: String!
+  user: User!
+  created_at: String!
+  updated_at: String!
+}
