@@ -1,6 +1,6 @@
 //一旦はっとく
 
-// package main
+package handler
 
 // import (
 // 	"fmt"
