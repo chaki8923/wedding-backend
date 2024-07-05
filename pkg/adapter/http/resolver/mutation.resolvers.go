@@ -52,11 +52,6 @@ func (r *mutationResolver) CreateInvitation(ctx context.Context, input graph.New
 		return nil, fmt.Errorf("failed to upload file to S3: %w", err)
 	}
 
-	// fileUrl, err := uploadFileToS3(ctx, input.FileURL)
-	// if err != nil {
-	// 	return nil, err
-	// }
-
 	// 入力値のエスケープ処理
 	escapedTitle := html.EscapeString(input.Title)
 	escapedEvent := html.EscapeString(input.EventDate)
@@ -97,6 +92,48 @@ func (r *mutationResolver) UpdateInvitation(ctx context.Context, input graph.Upd
 	}
 
 	return updated, nil
+}
+
+// CreateInvitee is the resolver for the createInvitee field.
+func (r *mutationResolver) CreateInvitee(ctx context.Context, input graph.NewInvitee) (*model.Invitee, error) {
+	log.Printf("招待者登録 %v", input)
+	var err error
+
+	fileUrl, err := r.IvteeUseCase.UploadFileToS3(ctx, input.FileURL)
+	if err != nil {
+		return nil, fmt.Errorf("failed to upload file to S3: %w", err)
+	}
+
+	// 入力値のエスケープ処理
+	escapedFamilyKj := html.EscapeString(input.FamilyKj)
+	escapedFamilyKn := html.EscapeString(input.FamilyKn)
+	escapedFirstKj := html.EscapeString(input.FirstKj)
+	escapedFirstKn := html.EscapeString(input.FirstKn)
+	escapedZipCode := html.EscapeString(input.ZipCode)
+	escapedEmail := html.EscapeString(input.Email)
+	escapedAddress := html.EscapeString(input.AddressText)
+	escapedAllergy := html.EscapeString(input.Allergy)
+
+	// 招待状の作成
+	created, err := r.IvteeUseCase.CreateInvitee(
+		&escapedFamilyKj,
+		&escapedFamilyKn,
+		&escapedFirstKj,
+		&escapedFirstKn,
+		&escapedEmail,
+		&escapedAddress,
+		&escapedAllergy,
+		&input.UserID,
+		&escapedZipCode,
+		&fileUrl,
+	)
+	if err != nil {
+		err = fmt.Errorf("resolver CreateInvitation() err %w", err)
+		sentry.CaptureException(err)
+		return nil, err
+	}
+
+	return created, nil
 }
 
 // UploadFile is the resolver for the uploadFile field.

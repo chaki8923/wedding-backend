@@ -38,6 +38,19 @@ func (r *queryResolver) GetInvitation(ctx context.Context) ([]*model.Invitation,
 	return invitation, nil
 }
 
+// GetInvitee is the resolver for the getInvitee field.
+func (r *queryResolver) GetInvitee(ctx context.Context) ([]*model.Invitee, error) {
+	invitee, err := r.IvteeUseCase.GetInvitee()
+
+	if err != nil {
+		err = fmt.Errorf("resolver Invitee() err %w", err)
+		sentry.CaptureException(err)
+		return nil, err
+	}
+
+	return invitee, nil
+}
+
 // ShowInvitation is the resolver for the showInvitation field.
 func (r *queryResolver) ShowInvitation(ctx context.Context, id string) (*model.Invitation, error) {
 	invitation, err := r.IvtUseCase.ShowInvitation(id)
@@ -47,6 +60,17 @@ func (r *queryResolver) ShowInvitation(ctx context.Context, id string) (*model.I
 		return nil, err
 	}
 	return invitation, nil
+}
+
+// ShowInvitee is the resolver for the showInvitee field.
+func (r *queryResolver) ShowInvitee(ctx context.Context, id string) (*model.Invitee, error) {
+	invitee, err := r.IvteeUseCase.ShowInvitee(id)
+	if err != nil {
+		err = fmt.Errorf("resolver 招待者詳細() err %w", err)
+		sentry.CaptureException(err)
+		return nil, err
+	}
+	return invitee, nil
 }
 
 // Query returns generated.QueryResolver implementation.

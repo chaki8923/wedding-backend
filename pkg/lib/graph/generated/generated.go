@@ -40,6 +40,7 @@ type Config struct {
 
 type ResolverRoot interface {
 	Invitation() InvitationResolver
+	Invitee() InviteeResolver
 	Message() MessageResolver
 	Mutation() MutationResolver
 	Query() QueryResolver
@@ -61,6 +62,22 @@ type ComplexityRoot struct {
 		User      func(childComplexity int) int
 	}
 
+	Invitee struct {
+		AddressText func(childComplexity int) int
+		Allergy     func(childComplexity int) int
+		CreatedAt   func(childComplexity int) int
+		Email       func(childComplexity int) int
+		FamilyKj    func(childComplexity int) int
+		FamilyKn    func(childComplexity int) int
+		FileURL     func(childComplexity int) int
+		FirstKj     func(childComplexity int) int
+		FirstKn     func(childComplexity int) int
+		ID          func(childComplexity int) int
+		UpdatedAt   func(childComplexity int) int
+		User        func(childComplexity int) int
+		ZipCode     func(childComplexity int) int
+	}
+
 	Message struct {
 		CreatedAt func(childComplexity int) int
 		ID        func(childComplexity int) int
@@ -71,6 +88,7 @@ type ComplexityRoot struct {
 
 	Mutation struct {
 		CreateInvitation func(childComplexity int, input graph.NewInvitation) int
+		CreateInvitee    func(childComplexity int, input graph.NewInvitee) int
 		CreateMessage    func(childComplexity int, input graph.NewMessage) int
 		CreateUser       func(childComplexity int, input graph.NewUser) int
 		UpdateInvitation func(childComplexity int, input graph.UpdateInvitation) int
@@ -80,8 +98,10 @@ type ComplexityRoot struct {
 
 	Query struct {
 		GetInvitation  func(childComplexity int) int
+		GetInvitee     func(childComplexity int) int
 		GetMessages    func(childComplexity int) int
 		ShowInvitation func(childComplexity int, id string) int
+		ShowInvitee    func(childComplexity int, id string) int
 	}
 
 	User struct {
@@ -95,6 +115,9 @@ type ComplexityRoot struct {
 type InvitationResolver interface {
 	User(ctx context.Context, obj *model.Invitation) (*model.User, error)
 }
+type InviteeResolver interface {
+	User(ctx context.Context, obj *model.Invitee) (*model.User, error)
+}
 type MessageResolver interface {
 	User(ctx context.Context, obj *model.Message) (*model.User, error)
 }
@@ -104,12 +127,15 @@ type MutationResolver interface {
 	CreateUser(ctx context.Context, input graph.NewUser) (*model.User, error)
 	CreateInvitation(ctx context.Context, input graph.NewInvitation) (*model.Invitation, error)
 	UpdateInvitation(ctx context.Context, input graph.UpdateInvitation) (*model.Invitation, error)
+	CreateInvitee(ctx context.Context, input graph.NewInvitee) (*model.Invitee, error)
 	UploadFile(ctx context.Context, fileURL graphql.Upload) (string, error)
 }
 type QueryResolver interface {
 	GetMessages(ctx context.Context) ([]*model.Message, error)
 	GetInvitation(ctx context.Context) ([]*model.Invitation, error)
+	GetInvitee(ctx context.Context) ([]*model.Invitee, error)
 	ShowInvitation(ctx context.Context, id string) (*model.Invitation, error)
+	ShowInvitee(ctx context.Context, id string) (*model.Invitee, error)
 }
 
 type executableSchema struct {
@@ -194,6 +220,97 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Invitation.User(childComplexity), true
 
+	case "Invitee.address_text":
+		if e.complexity.Invitee.AddressText == nil {
+			break
+		}
+
+		return e.complexity.Invitee.AddressText(childComplexity), true
+
+	case "Invitee.allergy":
+		if e.complexity.Invitee.Allergy == nil {
+			break
+		}
+
+		return e.complexity.Invitee.Allergy(childComplexity), true
+
+	case "Invitee.created_at":
+		if e.complexity.Invitee.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Invitee.CreatedAt(childComplexity), true
+
+	case "Invitee.email":
+		if e.complexity.Invitee.Email == nil {
+			break
+		}
+
+		return e.complexity.Invitee.Email(childComplexity), true
+
+	case "Invitee.family_kj":
+		if e.complexity.Invitee.FamilyKj == nil {
+			break
+		}
+
+		return e.complexity.Invitee.FamilyKj(childComplexity), true
+
+	case "Invitee.family_kn":
+		if e.complexity.Invitee.FamilyKn == nil {
+			break
+		}
+
+		return e.complexity.Invitee.FamilyKn(childComplexity), true
+
+	case "Invitee.file_url":
+		if e.complexity.Invitee.FileURL == nil {
+			break
+		}
+
+		return e.complexity.Invitee.FileURL(childComplexity), true
+
+	case "Invitee.first_kj":
+		if e.complexity.Invitee.FirstKj == nil {
+			break
+		}
+
+		return e.complexity.Invitee.FirstKj(childComplexity), true
+
+	case "Invitee.first_kn":
+		if e.complexity.Invitee.FirstKn == nil {
+			break
+		}
+
+		return e.complexity.Invitee.FirstKn(childComplexity), true
+
+	case "Invitee.id":
+		if e.complexity.Invitee.ID == nil {
+			break
+		}
+
+		return e.complexity.Invitee.ID(childComplexity), true
+
+	case "Invitee.updated_at":
+		if e.complexity.Invitee.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Invitee.UpdatedAt(childComplexity), true
+
+	case "Invitee.user":
+		if e.complexity.Invitee.User == nil {
+			break
+		}
+
+		return e.complexity.Invitee.User(childComplexity), true
+
+	case "Invitee.zip_code":
+		if e.complexity.Invitee.ZipCode == nil {
+			break
+		}
+
+		return e.complexity.Invitee.ZipCode(childComplexity), true
+
 	case "Message.created_at":
 		if e.complexity.Message.CreatedAt == nil {
 			break
@@ -240,6 +357,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.CreateInvitation(childComplexity, args["input"].(graph.NewInvitation)), true
+
+	case "Mutation.createInvitee":
+		if e.complexity.Mutation.CreateInvitee == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createInvitee_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateInvitee(childComplexity, args["input"].(graph.NewInvitee)), true
 
 	case "Mutation.createMessage":
 		if e.complexity.Mutation.CreateMessage == nil {
@@ -308,6 +437,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.GetInvitation(childComplexity), true
 
+	case "Query.getInvitee":
+		if e.complexity.Query.GetInvitee == nil {
+			break
+		}
+
+		return e.complexity.Query.GetInvitee(childComplexity), true
+
 	case "Query.getMessages":
 		if e.complexity.Query.GetMessages == nil {
 			break
@@ -326,6 +462,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.ShowInvitation(childComplexity, args["id"].(string)), true
+
+	case "Query.showInvitee":
+		if e.complexity.Query.ShowInvitee == nil {
+			break
+		}
+
+		args, err := ec.field_Query_showInvitee_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.ShowInvitee(childComplexity, args["id"].(string)), true
 
 	case "User.email":
 		if e.complexity.User.Email == nil {
@@ -364,6 +512,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	ec := executionContext{rc, e, 0, 0, make(chan graphql.DeferredResult)}
 	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
 		ec.unmarshalInputNewInvitation,
+		ec.unmarshalInputNewInvitee,
 		ec.unmarshalInputNewMessage,
 		ec.unmarshalInputNewUser,
 		ec.unmarshalInputUpdateInvitation,
@@ -491,7 +640,19 @@ input UpdateInvitation {
   comment: String
   file_url: Upload
 }
-`, BuiltIn: false},
+
+input NewInvitee {
+  family_kj: String!
+  first_kj: String!
+  family_kn: String!
+  first_kn: String!
+  email: String!
+  zip_code: String!
+  address_text: String!
+  allergy: String!
+  userId: String!
+  file_url: Upload!
+}`, BuiltIn: false},
 	{Name: "../schema/mutation.graphqls", Input: `scalar Upload
 
 type Mutation {
@@ -500,13 +661,16 @@ type Mutation {
     createUser(input: NewUser!): User!
     createInvitation(input: NewInvitation!): Invitation!
     updateInvitation(input: UpdateInvitation!): Invitation!
+    createInvitee(input: NewInvitee!): Invitee!
     uploadFile(file_url: Upload!): String!
 }
 `, BuiltIn: false},
 	{Name: "../schema/query.graphqls", Input: `type Query {
     getMessages: [Message!]!
     getInvitation: [Invitation!]!
+    getInvitee: [Invitee!]!
     showInvitation(id: String!): Invitation!
+    showInvitee(id: String!): Invitee!
 }`, BuiltIn: false},
 	{Name: "../schema/type.graphqls", Input: `type Message {
   id: ID!
@@ -533,6 +697,22 @@ type Invitation {
   user: User!
   created_at: String!
   updated_at: String!
+}
+
+type Invitee {
+  id: ID!
+  family_kj: String!
+  first_kj: String!
+  family_kn: String!
+  first_kn: String!
+  email: String!
+  zip_code: String!
+  address_text: String!
+  file_url: String!
+  allergy: String!
+  user: User!
+  created_at: String!
+  updated_at: String!
 }`, BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
@@ -548,6 +728,21 @@ func (ec *executionContext) field_Mutation_createInvitation_args(ctx context.Con
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 		arg0, err = ec.unmarshalNNewInvitation2githubᚗcomᚋchaki8923ᚋweddingᚑbackendᚋpkgᚋdomainᚋmodelᚋgraphᚐNewInvitation(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createInvitee_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 graph.NewInvitee
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNNewInvitee2githubᚗcomᚋchaki8923ᚋweddingᚑbackendᚋpkgᚋdomainᚋmodelᚋgraphᚐNewInvitee(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -647,6 +842,21 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 }
 
 func (ec *executionContext) field_Query_showInvitation_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_showInvitee_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
@@ -1095,6 +1305,588 @@ func (ec *executionContext) _Invitation_updated_at(ctx context.Context, field gr
 func (ec *executionContext) fieldContext_Invitation_updated_at(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Invitation",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Invitee_id(ctx context.Context, field graphql.CollectedField, obj *model.Invitee) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Invitee_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Invitee_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Invitee",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Invitee_family_kj(ctx context.Context, field graphql.CollectedField, obj *model.Invitee) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Invitee_family_kj(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.FamilyKj, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Invitee_family_kj(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Invitee",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Invitee_first_kj(ctx context.Context, field graphql.CollectedField, obj *model.Invitee) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Invitee_first_kj(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.FirstKj, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Invitee_first_kj(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Invitee",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Invitee_family_kn(ctx context.Context, field graphql.CollectedField, obj *model.Invitee) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Invitee_family_kn(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.FamilyKn, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Invitee_family_kn(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Invitee",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Invitee_first_kn(ctx context.Context, field graphql.CollectedField, obj *model.Invitee) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Invitee_first_kn(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.FirstKn, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Invitee_first_kn(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Invitee",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Invitee_email(ctx context.Context, field graphql.CollectedField, obj *model.Invitee) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Invitee_email(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Email, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Invitee_email(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Invitee",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Invitee_zip_code(ctx context.Context, field graphql.CollectedField, obj *model.Invitee) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Invitee_zip_code(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ZipCode, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Invitee_zip_code(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Invitee",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Invitee_address_text(ctx context.Context, field graphql.CollectedField, obj *model.Invitee) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Invitee_address_text(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.AddressText, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Invitee_address_text(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Invitee",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Invitee_file_url(ctx context.Context, field graphql.CollectedField, obj *model.Invitee) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Invitee_file_url(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.FileURL, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Invitee_file_url(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Invitee",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Invitee_allergy(ctx context.Context, field graphql.CollectedField, obj *model.Invitee) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Invitee_allergy(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Allergy, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Invitee_allergy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Invitee",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Invitee_user(ctx context.Context, field graphql.CollectedField, obj *model.Invitee) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Invitee_user(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Invitee().User(rctx, obj)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.User)
+	fc.Result = res
+	return ec.marshalNUser2ᚖgithubᚗcomᚋchaki8923ᚋweddingᚑbackendᚋpkgᚋdomainᚋmodelᚐUser(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Invitee_user(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Invitee",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_User_id(ctx, field)
+			case "name":
+				return ec.fieldContext_User_name(ctx, field)
+			case "email":
+				return ec.fieldContext_User_email(ctx, field)
+			case "password":
+				return ec.fieldContext_User_password(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Invitee_created_at(ctx context.Context, field graphql.CollectedField, obj *model.Invitee) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Invitee_created_at(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Invitee_created_at(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Invitee",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Invitee_updated_at(ctx context.Context, field graphql.CollectedField, obj *model.Invitee) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Invitee_updated_at(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Invitee_updated_at(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Invitee",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -1684,6 +2476,89 @@ func (ec *executionContext) fieldContext_Mutation_updateInvitation(ctx context.C
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_createInvitee(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createInvitee(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateInvitee(rctx, fc.Args["input"].(graph.NewInvitee))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Invitee)
+	fc.Result = res
+	return ec.marshalNInvitee2ᚖgithubᚗcomᚋchaki8923ᚋweddingᚑbackendᚋpkgᚋdomainᚋmodelᚐInvitee(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createInvitee(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Invitee_id(ctx, field)
+			case "family_kj":
+				return ec.fieldContext_Invitee_family_kj(ctx, field)
+			case "first_kj":
+				return ec.fieldContext_Invitee_first_kj(ctx, field)
+			case "family_kn":
+				return ec.fieldContext_Invitee_family_kn(ctx, field)
+			case "first_kn":
+				return ec.fieldContext_Invitee_first_kn(ctx, field)
+			case "email":
+				return ec.fieldContext_Invitee_email(ctx, field)
+			case "zip_code":
+				return ec.fieldContext_Invitee_zip_code(ctx, field)
+			case "address_text":
+				return ec.fieldContext_Invitee_address_text(ctx, field)
+			case "file_url":
+				return ec.fieldContext_Invitee_file_url(ctx, field)
+			case "allergy":
+				return ec.fieldContext_Invitee_allergy(ctx, field)
+			case "user":
+				return ec.fieldContext_Invitee_user(ctx, field)
+			case "created_at":
+				return ec.fieldContext_Invitee_created_at(ctx, field)
+			case "updated_at":
+				return ec.fieldContext_Invitee_updated_at(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Invitee", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createInvitee_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_uploadFile(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Mutation_uploadFile(ctx, field)
 	if err != nil {
@@ -1859,6 +2734,78 @@ func (ec *executionContext) fieldContext_Query_getInvitation(_ context.Context, 
 	return fc, nil
 }
 
+func (ec *executionContext) _Query_getInvitee(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getInvitee(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetInvitee(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Invitee)
+	fc.Result = res
+	return ec.marshalNInvitee2ᚕᚖgithubᚗcomᚋchaki8923ᚋweddingᚑbackendᚋpkgᚋdomainᚋmodelᚐInviteeᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_getInvitee(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Invitee_id(ctx, field)
+			case "family_kj":
+				return ec.fieldContext_Invitee_family_kj(ctx, field)
+			case "first_kj":
+				return ec.fieldContext_Invitee_first_kj(ctx, field)
+			case "family_kn":
+				return ec.fieldContext_Invitee_family_kn(ctx, field)
+			case "first_kn":
+				return ec.fieldContext_Invitee_first_kn(ctx, field)
+			case "email":
+				return ec.fieldContext_Invitee_email(ctx, field)
+			case "zip_code":
+				return ec.fieldContext_Invitee_zip_code(ctx, field)
+			case "address_text":
+				return ec.fieldContext_Invitee_address_text(ctx, field)
+			case "file_url":
+				return ec.fieldContext_Invitee_file_url(ctx, field)
+			case "allergy":
+				return ec.fieldContext_Invitee_allergy(ctx, field)
+			case "user":
+				return ec.fieldContext_Invitee_user(ctx, field)
+			case "created_at":
+				return ec.fieldContext_Invitee_created_at(ctx, field)
+			case "updated_at":
+				return ec.fieldContext_Invitee_updated_at(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Invitee", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query_showInvitation(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Query_showInvitation(ctx, field)
 	if err != nil {
@@ -1928,6 +2875,89 @@ func (ec *executionContext) fieldContext_Query_showInvitation(ctx context.Contex
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Query_showInvitation_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_showInvitee(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_showInvitee(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().ShowInvitee(rctx, fc.Args["id"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Invitee)
+	fc.Result = res
+	return ec.marshalNInvitee2ᚖgithubᚗcomᚋchaki8923ᚋweddingᚑbackendᚋpkgᚋdomainᚋmodelᚐInvitee(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_showInvitee(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Invitee_id(ctx, field)
+			case "family_kj":
+				return ec.fieldContext_Invitee_family_kj(ctx, field)
+			case "first_kj":
+				return ec.fieldContext_Invitee_first_kj(ctx, field)
+			case "family_kn":
+				return ec.fieldContext_Invitee_family_kn(ctx, field)
+			case "first_kn":
+				return ec.fieldContext_Invitee_first_kn(ctx, field)
+			case "email":
+				return ec.fieldContext_Invitee_email(ctx, field)
+			case "zip_code":
+				return ec.fieldContext_Invitee_zip_code(ctx, field)
+			case "address_text":
+				return ec.fieldContext_Invitee_address_text(ctx, field)
+			case "file_url":
+				return ec.fieldContext_Invitee_file_url(ctx, field)
+			case "allergy":
+				return ec.fieldContext_Invitee_allergy(ctx, field)
+			case "user":
+				return ec.fieldContext_Invitee_user(ctx, field)
+			case "created_at":
+				return ec.fieldContext_Invitee_created_at(ctx, field)
+			case "updated_at":
+				return ec.fieldContext_Invitee_updated_at(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Invitee", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_showInvitee_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -4074,6 +5104,96 @@ func (ec *executionContext) unmarshalInputNewInvitation(ctx context.Context, obj
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputNewInvitee(ctx context.Context, obj interface{}) (graph.NewInvitee, error) {
+	var it graph.NewInvitee
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"family_kj", "first_kj", "family_kn", "first_kn", "email", "zip_code", "address_text", "allergy", "userId", "file_url"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "family_kj":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("family_kj"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FamilyKj = data
+		case "first_kj":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("first_kj"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FirstKj = data
+		case "family_kn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("family_kn"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FamilyKn = data
+		case "first_kn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("first_kn"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FirstKn = data
+		case "email":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Email = data
+		case "zip_code":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("zip_code"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ZipCode = data
+		case "address_text":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("address_text"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddressText = data
+		case "allergy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("allergy"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Allergy = data
+		case "userId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UserID = data
+		case "file_url":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("file_url"))
+			data, err := ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FileURL = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputNewMessage(ctx context.Context, obj interface{}) (graph.NewMessage, error) {
 	var it graph.NewMessage
 	asMap := map[string]interface{}{}
@@ -4322,6 +5442,136 @@ func (ec *executionContext) _Invitation(ctx context.Context, sel ast.SelectionSe
 	return out
 }
 
+var inviteeImplementors = []string{"Invitee"}
+
+func (ec *executionContext) _Invitee(ctx context.Context, sel ast.SelectionSet, obj *model.Invitee) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, inviteeImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Invitee")
+		case "id":
+			out.Values[i] = ec._Invitee_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "family_kj":
+			out.Values[i] = ec._Invitee_family_kj(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "first_kj":
+			out.Values[i] = ec._Invitee_first_kj(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "family_kn":
+			out.Values[i] = ec._Invitee_family_kn(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "first_kn":
+			out.Values[i] = ec._Invitee_first_kn(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "email":
+			out.Values[i] = ec._Invitee_email(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "zip_code":
+			out.Values[i] = ec._Invitee_zip_code(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "address_text":
+			out.Values[i] = ec._Invitee_address_text(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "file_url":
+			out.Values[i] = ec._Invitee_file_url(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "allergy":
+			out.Values[i] = ec._Invitee_allergy(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "user":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Invitee_user(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "created_at":
+			out.Values[i] = ec._Invitee_created_at(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "updated_at":
+			out.Values[i] = ec._Invitee_updated_at(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var messageImplementors = []string{"Message"}
 
 func (ec *executionContext) _Message(ctx context.Context, sel ast.SelectionSet, obj *model.Message) graphql.Marshaler {
@@ -4466,6 +5716,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "createInvitee":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createInvitee(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "uploadFile":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_uploadFile(ctx, field)
@@ -4559,6 +5816,28 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "getInvitee":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_getInvitee(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
 		case "showInvitation":
 			field := field
 
@@ -4569,6 +5848,28 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_showInvitation(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "showInvitee":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_showInvitee(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
@@ -5080,6 +6381,64 @@ func (ec *executionContext) marshalNInvitation2ᚖgithubᚗcomᚋchaki8923ᚋwed
 	return ec._Invitation(ctx, sel, v)
 }
 
+func (ec *executionContext) marshalNInvitee2githubᚗcomᚋchaki8923ᚋweddingᚑbackendᚋpkgᚋdomainᚋmodelᚐInvitee(ctx context.Context, sel ast.SelectionSet, v model.Invitee) graphql.Marshaler {
+	return ec._Invitee(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNInvitee2ᚕᚖgithubᚗcomᚋchaki8923ᚋweddingᚑbackendᚋpkgᚋdomainᚋmodelᚐInviteeᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Invitee) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNInvitee2ᚖgithubᚗcomᚋchaki8923ᚋweddingᚑbackendᚋpkgᚋdomainᚋmodelᚐInvitee(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNInvitee2ᚖgithubᚗcomᚋchaki8923ᚋweddingᚑbackendᚋpkgᚋdomainᚋmodelᚐInvitee(ctx context.Context, sel ast.SelectionSet, v *model.Invitee) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Invitee(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNMessage2githubᚗcomᚋchaki8923ᚋweddingᚑbackendᚋpkgᚋdomainᚋmodelᚐMessage(ctx context.Context, sel ast.SelectionSet, v model.Message) graphql.Marshaler {
 	return ec._Message(ctx, sel, &v)
 }
@@ -5140,6 +6499,11 @@ func (ec *executionContext) marshalNMessage2ᚖgithubᚗcomᚋchaki8923ᚋweddin
 
 func (ec *executionContext) unmarshalNNewInvitation2githubᚗcomᚋchaki8923ᚋweddingᚑbackendᚋpkgᚋdomainᚋmodelᚋgraphᚐNewInvitation(ctx context.Context, v interface{}) (graph.NewInvitation, error) {
 	res, err := ec.unmarshalInputNewInvitation(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNNewInvitee2githubᚗcomᚋchaki8923ᚋweddingᚑbackendᚋpkgᚋdomainᚋmodelᚋgraphᚐNewInvitee(ctx context.Context, v interface{}) (graph.NewInvitee, error) {
+	res, err := ec.unmarshalInputNewInvitee(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 

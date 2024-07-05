@@ -45,18 +45,20 @@ func main() {
 	//DBを注入。
 	mr := infra.NewMessageRepository(db)
 	ir := infra.NewInvitationRepository(db,s3Client, "weddingnet")
+	ivr := infra.NewInviteeRepository(db,s3Client, "weddingnet")
 	ur := infra.NewUserRepository(db, c)
 	// repositoryを注入
 	au := usecase.NewAuthUseCase(ur, c)
 	mu := usecase.NewMsgUseCase(mr)
 	uu := usecase.NewUserUseCase(ur)
 	iu := usecase.NewIvtUseCase(ir)
+	ivu := usecase.NewIvteeUseCase(ivr)
 
 
 	ch := handler.NewCsrfHandler()
 	lh := handler.NewLoginHandler(au)
 	sh := handler.NewSignHandler(au)
-	gh := handler.NewGraphHandler(mu, uu, iu)
+	gh := handler.NewGraphHandler(mu, uu, iu, ivu)
 	ph := playground.Handler("GraphQL", "/query")
 	am := authMiddleware.NewAuthMiddleware(au)
 	fmt.Printf("IRです%+v\n", ir)

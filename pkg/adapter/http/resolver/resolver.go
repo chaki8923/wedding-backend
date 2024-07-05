@@ -14,4 +14,5 @@ type Resolver struct {
 	MsgUseCase  usecase.Message
 	UserUseCase usecase.User
 	IvtUseCase usecase.Invitation
+	IvteeUseCase usecase.Invitee
 }

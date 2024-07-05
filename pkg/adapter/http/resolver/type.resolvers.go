@@ -37,6 +37,29 @@ func (r *invitationResolver) User(ctx context.Context, obj *model.Invitation) (*
 }
 
 // User is the resolver for the user field.
+func (r *inviteeResolver) User(ctx context.Context, obj *model.Invitee) (*model.User, error) {
+	if obj.UserID == "" {
+		return nil, nil
+	}
+	user, err := r.UserUseCase.LoadUser(ctx, obj.UserID)
+	if err != nil {
+		err = fmt.Errorf("resolver User() err %w", err)
+		sentry.CaptureException(err)
+		return nil, err
+	}
+
+	// Convert graph.User to model.User
+	modelUser := &model.User{
+		ID:    user.ID,
+		Name:  user.Name,
+		Email: user.Email,
+		// 他のフィールドも適宜変換
+	}
+
+	return modelUser, nil
+}
+
+// User is the resolver for the user field.
 func (r *messageResolver) User(ctx context.Context, obj *model.Message) (*model.User, error) {
 	if obj.UserID == "" {
 		return nil, nil
@@ -62,10 +85,14 @@ func (r *messageResolver) User(ctx context.Context, obj *model.Message) (*model.
 // Invitation returns generated.InvitationResolver implementation.
 func (r *Resolver) Invitation() generated.InvitationResolver { return &invitationResolver{r} }
 
+// Invitee returns generated.InviteeResolver implementation.
+func (r *Resolver) Invitee() generated.InviteeResolver { return &inviteeResolver{r} }
+
 // Message returns generated.MessageResolver implementation.
 func (r *Resolver) Message() generated.MessageResolver { return &messageResolver{r} }
 
 type invitationResolver struct{ *Resolver }
+type inviteeResolver struct{ *Resolver }
 type messageResolver struct{ *Resolver }
 
 // !!! WARNING !!!
@@ -74,6 +101,9 @@ type messageResolver struct{ *Resolver }
 //   - When renaming or deleting a resolver the old code will be put in here. You can safely delete
 //     it when you're done.
 //   - You have helper methods in this file. Move them out to keep these resolver files clean.
+func (r *inviteeResolver) Address(ctx context.Context, obj *model.Invitee) (string, error) {
+	panic(fmt.Errorf("not implemented: Address - address"))
+}
 func (r *invitationResolver) File(ctx context.Context, obj *model.Invitation) (string, error) {
 	panic(fmt.Errorf("not implemented: File - file"))
 }

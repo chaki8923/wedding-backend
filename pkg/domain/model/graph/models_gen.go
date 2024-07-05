@@ -18,6 +18,19 @@ type NewInvitation struct {
 	FileURL   graphql.Upload `json:"file_url"`
 }
 
+type NewInvitee struct {
+	FamilyKj    string         `json:"family_kj"`
+	FirstKj     string         `json:"first_kj"`
+	FamilyKn    string         `json:"family_kn"`
+	FirstKn     string         `json:"first_kn"`
+	Email       string         `json:"email"`
+	ZipCode     string         `json:"zip_code"`
+	AddressText string         `json:"address_text"`
+	Allergy     string         `json:"allergy"`
+	UserID      string         `json:"userId"`
+	FileURL     graphql.Upload `json:"file_url"`
+}
+
 type NewMessage struct {
 	Text   string `json:"text"`
 	UserID string `json:"userId"`
