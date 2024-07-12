@@ -1,47 +1,62 @@
-//一旦はっとく
-
 package handler
 
-// import (
-// 	"fmt"
-// 	"net/http"
-// 	"github.com/aws/aws-sdk-go/aws"
-// 	"github.com/aws/aws-sdk-go/aws/session"
-// 	"github.com/aws/aws-sdk-go/service/ses"
-// 	"github.com/labstack/echo/v4"
-// )
+import (
+	"log"
+	"fmt"
+	"net/http"
+	"github.com/chaki8923/wedding-backend/pkg/usecase"
+	"github.com/labstack/echo/v4"
+)
 
-// type EmailRequest struct {
-// 	To      string `json:"to" validate:"required,email"`
-// 	Subject string `json:"subject" validate:"required"`
-// 	Body    string `json:"body" validate:"required"`
-// }
+// ---------------------------------------
+// SMTPサーバ情報取得
+// ---------------------------------------
 
-// func main() {
-// 	e := echo.New()
 
-// 	e.POST("/send-email", sendEmail)
+// ---------------------------------------
+// メール送信
+// param1. 送信するメールアドレス  string
+// param2. 送信するメールの件名   string
+// param3. 送信するメールの本文   string
+// return: error
+// ---------------------------------------
 
-// 	e.Logger.Fatal(e.Start(":8080"))
-// }
 
-// func sendEmail(c echo.Context) error {
-// 	req := new(EmailRequest)
-// 	if err := c.Bind(req); err != nil {
-// 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid request"})
-// 	}
+type SendMail interface {
+	SendMailHandler() echo.HandlerFunc
+}
 
-// 	if err := c.Validate(req); err != nil {
-// 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid request data"})
-// 	}
+type SendMailHandler struct {
+	SendMailUseCase usecase.SendMail
+}
 
-// 	sess, err := session.NewSession(&aws.Config{
-// 		Region: aws.String("us-west-2"), // 適切なリージョンに変更してください
-// 	})
-// 	if err != nil {
-// 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to create AWS session"})
-// 	}
+func NewSendMailHandler(su usecase.SendMail) SendMail {
+	SendMailHandler := SendMailHandler{
+		SendMailUseCase: su,
+	}
+	return &SendMailHandler
+}
 
-// 	svc := ses.New(sess)
+func (s *SendMailHandler) SendMailHandler() echo.HandlerFunc {
+	log.Printf("mailhandler入った-------------------------")
 
-// 	input := &ses.SendEmailInput
+	return func(c echo.Context) (err error) {
+		var fv = &usecase.MailFormValue{
+			To:    c.FormValue("to"),
+			From: c.FormValue("from"),
+			Subject: c.FormValue("subject"),
+			Body: c.FormValue("body"),
+		}
+
+
+		userId, err := s.SendMailUseCase.SendMail(&fv.From, &fv.To, &fv.Subject, &fv.Body)
+		if err != nil {
+			return fmt.Errorf("signup failed err: %w", err)
+		}
+
+		return c.JSON(http.StatusOK, echo.Map{
+			"userId": userId,
+		})
+	}
+
+}

@@ -41,30 +41,37 @@ func main() {
 		log.Fatalf("failed to create AWS session: %v", err)
 	}
 	s3Client := s3.New(sess)
+
+
 	// DI
 	//DBを注入。
 	mr := infra.NewMessageRepository(db)
 	ir := infra.NewInvitationRepository(db,s3Client, "weddingnet")
 	ivr := infra.NewInviteeRepository(db,s3Client, "weddingnet")
+	upr := infra.NewUploadRepository(db,s3Client, "weddingnet")
 	ur := infra.NewUserRepository(db, c)
+	sr := infra.NewSendMailRepository(db)
 	// repositoryを注入
 	au := usecase.NewAuthUseCase(ur, c)
+	su := usecase.NewMailUseCase(sr)
 	mu := usecase.NewMsgUseCase(mr)
 	uu := usecase.NewUserUseCase(ur)
 	iu := usecase.NewIvtUseCase(ir)
 	ivu := usecase.NewIvteeUseCase(ivr)
+	upu := usecase.NewUploadUseCase(upr)
 
 
 	ch := handler.NewCsrfHandler()
+	mh := handler.NewSendMailHandler(su)
 	lh := handler.NewLoginHandler(au)
 	sh := handler.NewSignHandler(au)
-	gh := handler.NewGraphHandler(mu, uu, iu, ivu)
+	gh := handler.NewGraphHandler(mu, uu, iu, ivu, upu)
 	ph := playground.Handler("GraphQL", "/query")
 	am := authMiddleware.NewAuthMiddleware(au)
 	fmt.Printf("IRです%+v\n", ir)
 	fmt.Printf("IUです%+v\n", iu)
 	// Rooting
-	r := route.NewInitRoute(ch, lh, sh, gh, ph, am)
+	r := route.NewInitRoute(ch, lh, sh, mh, gh, ph, am)
 	_, err = r.InitRouting(c)
 	if err != nil {
 		sentry.CaptureException(fmt.Errorf("InitRouting at NewInitRoute err: %w", err))

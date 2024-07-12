@@ -36,6 +36,11 @@ type NewMessage struct {
 	UserID string `json:"userId"`
 }
 
+type NewUpload struct {
+	Comment string         `json:"comment"`
+	FileURL graphql.Upload `json:"file_url"`
+}
+
 type User struct {
 	ID       string `json:"id"`
 	Name     string `json:"name"`
@@ -58,4 +63,12 @@ type UpdateInvitation struct {
 	Place     *string         `json:"place,omitempty"`
 	Comment   *string         `json:"comment,omitempty"`
 	FileURL   *graphql.Upload `json:"file_url,omitempty"`
+}
+
+type UploadImage struct {
+	ID        string `json:"id"`
+	Comment   string `json:"comment"`
+	FileURL   string `json:"file_url"`
+	CreatedAt string `json:"created_at"`
+	UpdatedAt string `json:"updated_at"`
 }

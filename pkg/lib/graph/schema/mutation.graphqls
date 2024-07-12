@@ -7,5 +7,5 @@ type Mutation {
     createInvitation(input: NewInvitation!): Invitation!
     updateInvitation(input: UpdateInvitation!): Invitation!
     createInvitee(input: NewInvitee!): Invitee!
-    uploadFile(file_url: Upload!): String!
+    uploadFile(input: NewUpload!): Upload!
 }

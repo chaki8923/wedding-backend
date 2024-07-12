@@ -12,7 +12,7 @@ mysql:
 migrate:
 	docker-compose exec app goose -dir ./build/db/migration mysql "root:user@tcp(mysql:3306)/golang" up # mysqlはコンテナ名
 create-migration: # ファイル名は適宜変更すること
-	docker-compose exec app goose -dir ./build/db/migration create insert_invitee sql
+	docker-compose exec app goose -dir ./build/db/migration create create_upload sql
 create-mock: # ファイル名は適宜変更すること
 	docker-compose exec app mockgen -source=pkg/domain/repository/user_repository.go -destination pkg/lib/mock/mock_user.go
 start:

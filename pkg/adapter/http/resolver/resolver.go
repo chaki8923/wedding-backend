@@ -15,4 +15,5 @@ type Resolver struct {
 	UserUseCase usecase.User
 	IvtUseCase usecase.Invitation
 	IvteeUseCase usecase.Invitee
+	UpdUseCase usecase.Upload
 }

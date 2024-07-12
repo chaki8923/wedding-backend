@@ -137,7 +137,7 @@ func (r *mutationResolver) CreateInvitee(ctx context.Context, input graph.NewInv
 }
 
 // UploadFile is the resolver for the uploadFile field.
-func (r *mutationResolver) UploadFile(ctx context.Context, fileURL graphql.Upload) (string, error) {
+func (r *mutationResolver) UploadFile(ctx context.Context, input graph.NewUpload) (*graphql.Upload, error) {
 	panic(fmt.Errorf("not implemented: UploadFile - uploadFile"))
 }
 

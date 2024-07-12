@@ -23,6 +23,8 @@ type Config struct {
 	SentryDsn  string `env:"API_SENTRY_DSN" envDefault:"https://xxxxxxxx"`
 	AwsAccessKey  string `env:"AWS_ACCESS_KEY" envDefault:"aaaaaaa"`
 	AwsSecretKey  string `env:"AWS_SECRET_KEY" envDefault:"bbbbbb"`
+	GoogleAccount  string `env:"GOOGLE_ACCOUNT" envDefault:"bbbbbb"`
+	GoogleApiKey  string `env:"GOOGLE_API_KEY" envDefault:"bbbbbb"`
 }
 
 func New() (*Config, error) {

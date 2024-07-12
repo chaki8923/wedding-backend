@@ -23,13 +23,21 @@ type InitRoute struct {
 	Ch handler.Csrf
 	Lh handler.Login
 	Sh handler.Signup
+	Mh handler.SendMail
 	Gh handler.Graph
 	Ph http.HandlerFunc
 	Am authMiddleware.Auth
 }
 
-func NewInitRoute(ch handler.Csrf, lh handler.Login, sh handler.Signup, gh handler.Graph, ph http.HandlerFunc, am authMiddleware.Auth) Route {
-	InitRoute := InitRoute{ch, lh, sh, gh, ph, am}
+func NewInitRoute(
+	ch handler.Csrf, 
+	lh handler.Login, 
+	sh handler.Signup, 
+	mh handler.SendMail, 
+	gh handler.Graph, 
+	ph http.HandlerFunc, 
+	am authMiddleware.Auth) Route {
+	InitRoute := InitRoute{ch, lh, sh, mh, gh, ph, am}
 	return &InitRoute
 }
 
@@ -84,6 +92,7 @@ func (i *InitRoute) InitRouting(cfg *config.Config) (*echo.Echo, error) {
 	e.POST("/login", i.Lh.LoginHandler())
 	e.POST("/signup", i.Sh.SignupHandler())
 	e.GET("/logout", i.Lh.LogoutHandler())
+	e.POST("/mail", i.Mh.SendMailHandler())
 	e.POST("/query", i.Gh.QueryHandler())
 	e.GET("/playground", func(c echo.Context) error {
 		i.Ph.ServeHTTP(c.Response(), c.Request())

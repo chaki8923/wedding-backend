@@ -24,14 +24,16 @@ type GraphHandler struct {
 	UserUseCase usecase.User
 	IvtUseCase  usecase.Invitation
 	IvteeUseCase  usecase.Invitee
+	UpdUseCase  usecase.Upload
 }
 
-func NewGraphHandler(mu usecase.Message, uc usecase.User, iu usecase.Invitation, ivu usecase.Invitee) Graph {
+func NewGraphHandler(mu usecase.Message, uc usecase.User, iu usecase.Invitation, ivu usecase.Invitee, upu usecase.Upload) Graph {
 	GraphHandler := GraphHandler{
 		MsgUseCase:  mu,
 		UserUseCase: uc,
 		IvtUseCase:  iu,
 		IvteeUseCase: ivu,
+		UpdUseCase: upu,
 	}
 	return &GraphHandler
 }
@@ -49,6 +51,7 @@ func (g *GraphHandler) QueryHandler() echo.HandlerFunc {
 		UserUseCase: g.UserUseCase,
 		IvtUseCase:  g.IvtUseCase,
 		IvteeUseCase: g.IvteeUseCase,
+		UpdUseCase: g.UpdUseCase,
 	}
 
 	srv := handler.NewDefaultServer(
