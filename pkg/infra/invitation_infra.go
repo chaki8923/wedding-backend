@@ -152,3 +152,36 @@ func (i *invitationRepository) UploadFileToS3(ctx context.Context, file_url grap
 	log.Printf("file_url %s", fileUrl)
 	return fileUrl, nil
 }
+
+
+func (i *invitationRepository) DeleteInvitation(id string) (*model.Invitation, error) {
+	var record model.Invitation
+	if result := i.db.Where("id = ?", id).First(&record); result.Error != nil {
+		return nil, xerrors.Errorf("repository  招待状詳細取得 err %w", result.Error)
+	}
+
+	  // S3の画像を削除
+    if record.FileURL != "" {
+			_, err := i.s3Client.DeleteObject(&s3.DeleteObjectInput{
+					Bucket: aws.String(i.bucket),
+					Key:    aws.String(record.FileURL),
+			})
+			if err != nil {
+					return nil, xerrors.Errorf("S3画像削除 err %w", err)
+			}
+
+			err = i.s3Client.WaitUntilObjectNotExists(&s3.HeadObjectInput{
+					Bucket: aws.String(i.bucket),
+					Key:    aws.String(record.FileURL),
+			})
+			if err != nil {
+					return nil, xerrors.Errorf("S3画像削除確認 err %w", err)
+			}
+	}
+
+	if result := i.db.Delete(&record); result.Error != nil {
+		return nil, xerrors.Errorf("repository 招待状削除 err %w", result.Error)
+}
+
+	return &record, nil
+}

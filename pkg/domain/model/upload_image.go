@@ -1,7 +1,7 @@
 package model
 
 
-type Upload struct {
+type UploadImage struct {
 	ID         string `json:"id"`
 	Comment      string `json:"comment"`
 	FileURL    string `json:"file_url"`

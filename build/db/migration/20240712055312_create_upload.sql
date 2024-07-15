@@ -1,5 +1,5 @@
 -- +goose Up
-CREATE TABLE uploads (
+CREATE TABLE upload_images (
    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
    comment VARCHAR(255) DEFAULT NULL,
    file_url VARCHAR(255) DEFAULT NULL,
@@ -9,5 +9,5 @@ CREATE TABLE uploads (
 CREATE INDEX upload_id on uploads (id);
 
 -- +goose Down
-DROP INDEX invitee_id;
-DROP TABLE invitees;
+DROP INDEX upload_images_id;
+DROP TABLE uploads;

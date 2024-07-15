@@ -12,4 +12,5 @@ type Invitation interface {
 	CreateInvitation(invitation *model.Invitation) (*model.Invitation, error)
 	UpdateInvitation(id string, invitation *model.Invitation) (*model.Invitation, error)
 	ShowInvitation(id string) (*model.Invitation, error)
+	DeleteInvitation(id string) (*model.Invitation, error)
 }

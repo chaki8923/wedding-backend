@@ -64,11 +64,3 @@ type UpdateInvitation struct {
 	Comment   *string         `json:"comment,omitempty"`
 	FileURL   *graphql.Upload `json:"file_url,omitempty"`
 }
-
-type UploadImage struct {
-	ID        string `json:"id"`
-	Comment   string `json:"comment"`
-	FileURL   string `json:"file_url"`
-	CreatedAt string `json:"created_at"`
-	UpdatedAt string `json:"updated_at"`
-}

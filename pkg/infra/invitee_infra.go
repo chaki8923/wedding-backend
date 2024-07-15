@@ -97,6 +97,40 @@ func (i *inviteeRepository) ShowInvitee(id string) (*model.Invitee, error) {
 	return &record, nil
 }
 
+func (i *inviteeRepository) DeleteInvitee(id string) (*model.Invitee, error) {
+	var record model.Invitee
+	if result := i.db.Where("id = ?", id).First(&record); result.Error != nil {
+		return nil, xerrors.Errorf("repository  招待状詳細取得 err %w", result.Error)
+	}
+
+	  // S3の画像を削除
+    if record.FileURL != "" {
+			_, err := i.s3Client.DeleteObject(&s3.DeleteObjectInput{
+					Bucket: aws.String(i.bucket),
+					Key:    aws.String(record.FileURL),
+			})
+			if err != nil {
+					return nil, xerrors.Errorf("S3画像削除 err %w", err)
+			}
+
+			err = i.s3Client.WaitUntilObjectNotExists(&s3.HeadObjectInput{
+					Bucket: aws.String(i.bucket),
+					Key:    aws.String(record.FileURL),
+			})
+			if err != nil {
+					return nil, xerrors.Errorf("S3画像削除確認 err %w", err)
+			}
+	}
+
+	if result := i.db.Delete(&record); result.Error != nil {
+		return nil, xerrors.Errorf("repository 招待状削除 err %w", result.Error)
+}
+
+	log.Printf("InvitationInfra詳細: %+v\n", record)
+
+	return &record, nil
+}
+
 
 func (i *inviteeRepository) UploadFileToS3(ctx context.Context, file_url graphql.Upload) (string, error) {
 	// ファイルの一時保存先の準備

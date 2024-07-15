@@ -10,7 +10,6 @@ import (
 	"html"
 	"log"
 
-	"github.com/99designs/gqlgen/graphql"
 	"github.com/chaki8923/wedding-backend/pkg/domain/model"
 	"github.com/chaki8923/wedding-backend/pkg/domain/model/graph"
 	"github.com/chaki8923/wedding-backend/pkg/lib/graph/generated"
@@ -137,8 +136,52 @@ func (r *mutationResolver) CreateInvitee(ctx context.Context, input graph.NewInv
 }
 
 // UploadFile is the resolver for the uploadFile field.
-func (r *mutationResolver) UploadFile(ctx context.Context, input graph.NewUpload) (*graphql.Upload, error) {
-	panic(fmt.Errorf("not implemented: UploadFile - uploadFile"))
+func (r *mutationResolver) UploadFile(ctx context.Context, input graph.NewUpload) (*model.UploadImage, error) {
+	log.Printf("画像登録 %v", input)
+	var err error
+
+	fileUrl, err := r.UpdUseCase.UploadFileToS3(ctx, input.FileURL)
+	if err != nil {
+		return nil, fmt.Errorf("failed to upload file to S3: %w", err)
+	}
+
+	// 入力値のエスケープ処理
+	escapedComment := html.EscapeString(input.Comment)
+
+	// 招待状の作成
+	created, err := r.UpdUseCase.UploadFile(
+		&escapedComment,
+		&fileUrl,
+	)
+	if err != nil {
+		err = fmt.Errorf("resolver CreateInvitation() err %w", err)
+		sentry.CaptureException(err)
+		return nil, err
+	}
+
+	return created, nil
+}
+
+// DeleteInvitee is the resolver for the deleteInvitee field.
+func (r *mutationResolver) DeleteInvitee(ctx context.Context, id string) (*model.Invitee, error) {
+	invitee, err := r.IvteeUseCase.DeleteInvitee(id)
+	if err != nil {
+		err = fmt.Errorf("resolver 招待者削除() err %w", err)
+		sentry.CaptureException(err)
+		return nil, err
+	}
+	return invitee, nil
+}
+
+// DeleteInvitation is the resolver for the deleteInvitation field.
+func (r *mutationResolver) DeleteInvitation(ctx context.Context, id string) (*model.Invitation, error) {
+	invitation, err := r.IvtUseCase.DeleteInvitation(id)
+	if err != nil {
+		err = fmt.Errorf("resolver 招待者削除() err %w", err)
+		sentry.CaptureException(err)
+		return nil, err
+	}
+	return invitation, nil
 }
 
 // Mutation returns generated.MutationResolver implementation.

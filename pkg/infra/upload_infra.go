@@ -25,7 +25,7 @@ type updRepository struct {
 }
 
 // repository内のinvitationRepositoryのインターフェースに定義したらここで実装しないとエラー
-func NewUploadRepository(db *gorm.DB, s3Client *s3.S3, bucket string) repository.Upload {
+func NewUploadRepository(db *gorm.DB, s3Client *s3.S3, bucket string) repository.UploadImage {
 	return &updRepository{
 		db: db,
 		s3Client: s3Client,
@@ -33,7 +33,7 @@ func NewUploadRepository(db *gorm.DB, s3Client *s3.S3, bucket string) repository
 	}
 }
 
-func (u *updRepository) UploadFile(upload *model.Upload) (*model.Upload, error) {
+func (u *updRepository) UploadFile(upload *model.UploadImage) (*model.UploadImage, error) {
 
 	if result := u.db.Create(upload); result.Error != nil {
 		return nil, xerrors.Errorf("repository 招待者取得 err %w", result.Error)
@@ -97,4 +97,22 @@ func (u *updRepository) UploadFileToS3(ctx context.Context, file_url graphql.Upl
 	fileUrl := "https://weddingnet.s3-ap-northeast-1.amazonaws.com/" + fileKey
 	log.Printf("file_url %s", fileUrl)
 	return fileUrl, nil
+}
+
+func (u *updRepository) GetImages() ([]*model.UploadImage, error) {
+	var records []model.UploadImage
+	if result := u.db.Find(&records); result.Error != nil {
+		return nil, xerrors.Errorf("repository  招待者取得 err %w", result.Error)
+	}
+
+	var res []*model.UploadImage
+	for _, record := range records {
+		record := record
+		res = append(res, &record)
+	}
+	for _, msg := range res {
+		log.Printf("画像等: %+v\n", *msg)
+	}
+
+	return res, nil
 }

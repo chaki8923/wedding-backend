@@ -6,7 +6,8 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 )
 
-type Upload interface {
+type UploadImage interface {
 	UploadFileToS3(context.Context, graphql.Upload) (string, error)
-	UploadFile(upload *model.Upload) (*model.Upload, error)
+	UploadFile(upload *model.UploadImage) (*model.UploadImage, error)
+	GetImages() ([]*model.UploadImage, error)
 }

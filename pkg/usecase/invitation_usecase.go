@@ -15,6 +15,7 @@ type Invitation interface {
 	UpdateInvitation(id *string, title *string, event_date *string, place *string, comment *string) (*model.Invitation, error)
 	GetInvitation() ([]*model.Invitation, error)
 	ShowInvitation(id string) (*model.Invitation, error)
+	DeleteInvitation(id string) (*model.Invitation, error)
 	UploadFileToS3(ctx context.Context, file_url graphql.Upload) (string, error)
 
 }
@@ -102,4 +103,14 @@ func (i *IvtUseCase) UploadFileToS3(ctx context.Context, file_url graphql.Upload
 	return fileURL, nil
 }
 
+func (i *IvtUseCase) DeleteInvitation(id string) (*model.Invitation, error) {
+	invitation, err := i.ivtRepo.DeleteInvitation(id)
+	if err != nil {
+		return nil, fmt.Errorf("resolver 招待状 err %w", err)
+	}
 
+
+	log.Printf("InvitationUseCase駆除！！: %+v\n", invitation)
+
+	return invitation, nil
+}

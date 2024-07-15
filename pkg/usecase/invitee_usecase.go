@@ -36,6 +36,7 @@ type Invitee interface {
 		file_url *string) (*model.Invitee, error)
 	GetInvitee() ([]*model.Invitee, error)
 	ShowInvitee(id string) (*model.Invitee, error)
+	DeleteInvitee(id string) (*model.Invitee, error)
 	UploadFileToS3(ctx context.Context, file_url graphql.Upload) (string, error)
 
 }
@@ -133,6 +134,18 @@ func (i *IvteeUseCase) GetInvitee() ([]*model.Invitee, error) {
 
 func (i *IvteeUseCase) ShowInvitee(id string) (*model.Invitee, error) {
 	invitee, err := i.ivteeRepo.ShowInvitee(id)
+	if err != nil {
+		return nil, fmt.Errorf("resolver 招待状 err %w", err)
+	}
+
+
+	log.Printf("InvitationUseCase詳細！！: %+v\n", invitee)
+
+	return invitee, nil
+}
+
+func (i *IvteeUseCase) DeleteInvitee(id string) (*model.Invitee, error) {
+	invitee, err := i.ivteeRepo.DeleteInvitee(id)
 	if err != nil {
 		return nil, fmt.Errorf("resolver 招待状 err %w", err)
 	}

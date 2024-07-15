@@ -2,6 +2,7 @@ type Query {
     getMessages: [Message!]!
     getInvitation: [Invitation!]!
     getInvitee: [Invitee!]!
+    getImages: [UploadImage!]!
     showInvitation(id: String!): Invitation!
     showInvitee(id: String!): Invitee!
 }
