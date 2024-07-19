@@ -13,6 +13,7 @@ type Invitee struct {
 	Allergy     string `json:"allergy"`
 	UserID     string `json:"user_id"`
 	FileURL    string `json:"file_url"`
+	JoinFlag    bool `json:"join_flag"`
 	CreatedAt  string `json:"created_at"`
 	UpdatedAt  string `json:"updated_at"`
 }

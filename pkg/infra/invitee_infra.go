@@ -65,9 +65,9 @@ func (i *inviteeRepository) UpdateInvitee(id string, updatedInvitee *model.Invit
 	// まず、対象のレコードを取得する
 	var invitee model.Invitee
 	if result := i.db.First(&invitee, "id = ?", id); result.Error != nil {
-		return nil, xerrors.Errorf("repository 招待状取得 err %w", result.Error)
+		return nil, xerrors.Errorf("repository 招待状更新Infra err %w", result.Error)
 	}
-
+	log.Printf("infra_join!!!: %+v\n", updatedInvitee.JoinFlag)
 	// レコードを更新する
 	invitee.FamilyKj = updatedInvitee.FamilyKj
 	invitee.FirstKj = updatedInvitee.FirstKj
@@ -75,6 +75,8 @@ func (i *inviteeRepository) UpdateInvitee(id string, updatedInvitee *model.Invit
 	invitee.FamilyKn = updatedInvitee.FamilyKn
 	invitee.Email = updatedInvitee.Email
 	invitee.ZipCode = updatedInvitee.ZipCode
+	invitee.FileURL = updatedInvitee.FileURL
+	invitee.JoinFlag = updatedInvitee.JoinFlag
 	invitee.AddressText = updatedInvitee.AddressText
 	invitee.Allergy = updatedInvitee.Allergy
 	invitee.UpdatedAt = time.Now().Format("2006-01-02 15:04:05")

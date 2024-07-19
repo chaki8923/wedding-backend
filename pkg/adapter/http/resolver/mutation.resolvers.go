@@ -116,14 +116,14 @@ func (r *mutationResolver) CreateInvitee(ctx context.Context, input graph.NewInv
 	// 招待状の作成
 	created, err := r.IvteeUseCase.CreateInvitee(
 		&escapedFamilyKj,
-		&escapedFamilyKn,
 		&escapedFirstKj,
+		&escapedFamilyKn,
 		&escapedFirstKn,
 		&escapedEmail,
-		&escapedAddress,
-		&escapedAllergy,
-		&input.UserID,
 		&escapedZipCode,
+		&escapedAddress,
+		&input.UserID,
+		&escapedAllergy,
 		&fileUrl,
 	)
 	if err != nil {
@@ -133,6 +133,72 @@ func (r *mutationResolver) CreateInvitee(ctx context.Context, input graph.NewInv
 	}
 
 	return created, nil
+}
+
+// UpdateInvitee is the resolver for the updateInvitee field.
+func (r *mutationResolver) UpdateInvitee(ctx context.Context, input graph.UpdateInvitee) (*model.Invitee, error) {
+	log.Printf("招待者更新だ-------")
+
+	var fileUrl string
+	var err error
+	if input.FileURL != nil {
+		fileUrl, err = r.IvteeUseCase.UploadFileToS3(ctx, *input.FileURL)
+		if err != nil {
+			return nil, fmt.Errorf("failed to upload file to S3: %w", err)
+		}
+	}
+	log.Printf("Input: %+v", input)
+	var escapedFamilyKj, escapedFamilyKn, escapedFirstKj, escapedFirstKn, escapedZipCode, escapedEmail, escapedAddress, escapedAllergy string
+
+	// 入力値のエスケープ処理
+	if input.FamilyKj != nil {
+		escapedFamilyKj = html.EscapeString(*input.FamilyKj)
+	}
+	if input.FamilyKn != nil {
+		escapedFamilyKn = html.EscapeString(*input.FamilyKn)
+	}
+	if input.FirstKj != nil {
+		escapedFirstKj = html.EscapeString(*input.FirstKj)
+	}
+	if input.FirstKn != nil {
+		escapedFirstKn = html.EscapeString(*input.FirstKn)
+	}
+	if input.ZipCode != nil {
+		escapedZipCode = html.EscapeString(*input.ZipCode)
+	}
+	if input.Email != nil {
+		escapedEmail = html.EscapeString(*input.Email)
+	}
+	if input.AddressText != nil {
+		escapedAddress = html.EscapeString(*input.AddressText)
+	}
+	if input.Allergy != nil {
+		escapedAllergy = html.EscapeString(*input.Allergy)
+	}
+
+	log.Printf("Boolean: %v", input.JoinFlag)
+	log.Printf("アレルギー: %v", &escapedAllergy)
+
+	updated, err := r.IvteeUseCase.UpdateInvitee(
+		&input.ID,
+		&escapedFamilyKj,
+		&escapedFirstKj,
+		&escapedFamilyKn,
+		&escapedFirstKn,
+		&escapedEmail,
+		&escapedZipCode,
+		&escapedAddress,
+		&escapedAllergy,
+		&fileUrl,
+		input.JoinFlag,
+	)
+	if err != nil {
+		err = fmt.Errorf("resolver UpdateInvitee() err %w", err)
+		sentry.CaptureException(err)
+		return nil, err
+	}
+
+	return updated, nil
 }
 
 // UploadFile is the resolver for the uploadFile field.

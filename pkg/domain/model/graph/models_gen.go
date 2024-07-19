@@ -64,3 +64,17 @@ type UpdateInvitation struct {
 	Comment   *string         `json:"comment,omitempty"`
 	FileURL   *graphql.Upload `json:"file_url,omitempty"`
 }
+
+type UpdateInvitee struct {
+	ID          string          `json:"id"`
+	FamilyKj    *string         `json:"family_kj,omitempty"`
+	FirstKj     *string         `json:"first_kj,omitempty"`
+	FamilyKn    *string         `json:"family_kn,omitempty"`
+	FirstKn     *string         `json:"first_kn,omitempty"`
+	Email       *string         `json:"email,omitempty"`
+	ZipCode     *string         `json:"zip_code,omitempty"`
+	AddressText *string         `json:"address_text,omitempty"`
+	Allergy     *string         `json:"allergy,omitempty"`
+	JoinFlag    *bool           `json:"join_flag,omitempty"`
+	FileURL     *graphql.Upload `json:"file_url,omitempty"`
+}

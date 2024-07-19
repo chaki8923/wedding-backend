@@ -35,6 +35,7 @@ type Invitee {
   zip_code: String!
   address_text: String!
   file_url: String!
+  join_flag: Boolean!
   allergy: String!
   user: User!
   created_at: String!

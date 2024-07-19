@@ -33,7 +33,9 @@ type Invitee interface {
 		zip_code *string, 
 		address_text *string, 
 		allergy *string, 
-		file_url *string) (*model.Invitee, error)
+		file_url *string,
+		join_flag *bool,
+		) (*model.Invitee, error)
 	GetInvitee() ([]*model.Invitee, error)
 	ShowInvitee(id string) (*model.Invitee, error)
 	DeleteInvitee(id string) (*model.Invitee, error)
@@ -97,7 +99,9 @@ func (i *IvteeUseCase) UpdateInvitee(
 	zip_code *string, 
 	address_text *string, 
 	allergy *string, 
-	file_url *string) (*model.Invitee, error)  {
+	file_url *string,
+	join_flag *bool,
+	) (*model.Invitee, error)  {
 	now := time.Now().Format("2006-01-02 15:04:05")
 	updatedInvitee := model.Invitee{
 		FamilyKj:      *family_kj,
@@ -110,6 +114,7 @@ func (i *IvteeUseCase) UpdateInvitee(
 		Allergy:      *allergy,
 		UpdatedAt: now,
 		FileURL:   *file_url, // 画像URLを保存
+		JoinFlag:   *join_flag,
 	}
 
 	invitee, err := i.ivteeRepo.UpdateInvitee(*id, &updatedInvitee)
