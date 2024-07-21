@@ -23,3 +23,11 @@ func (r *SendMailRepository) SendMail(mail *model.SendMail) (*model.SendMail, er
 
 	return mail, nil
 }
+
+func (r *SendMailRepository) FindInviteeByEmail(email string) (*model.Invitee, error) {
+	var invitee model.Invitee
+	if result := r.db.Where("email = ?", email).First(&invitee); result.Error != nil {
+		return nil, result.Error
+	}
+	return &invitee, nil
+}

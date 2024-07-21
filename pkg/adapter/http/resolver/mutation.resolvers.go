@@ -14,6 +14,7 @@ import (
 	"github.com/chaki8923/wedding-backend/pkg/domain/model/graph"
 	"github.com/chaki8923/wedding-backend/pkg/lib/graph/generated"
 	sentry "github.com/getsentry/sentry-go"
+	"github.com/google/uuid"
 )
 
 // CreateMessage is the resolver for the createMessage field.
@@ -56,6 +57,8 @@ func (r *mutationResolver) CreateInvitation(ctx context.Context, input graph.New
 	escapedEvent := html.EscapeString(input.EventDate)
 	escapedPlace := html.EscapeString(input.Place)
 	escapedComment := html.EscapeString(input.Comment)
+	// UUIDを生成
+	newUUID := uuid.New().String()
 
 	// 招待状の作成
 	created, err := r.IvtUseCase.CreateInvitation(
@@ -65,6 +68,7 @@ func (r *mutationResolver) CreateInvitation(ctx context.Context, input graph.New
 		&escapedComment,
 		&input.UserID,
 		&fileUrl,
+		&newUUID,
 	)
 	if err != nil {
 		err = fmt.Errorf("resolver CreateInvitation() err %w", err)
@@ -147,7 +151,6 @@ func (r *mutationResolver) UpdateInvitee(ctx context.Context, input graph.Update
 			return nil, fmt.Errorf("failed to upload file to S3: %w", err)
 		}
 	}
-	log.Printf("Input: %+v", input)
 	var escapedFamilyKj, escapedFamilyKn, escapedFirstKj, escapedFirstKn, escapedZipCode, escapedEmail, escapedAddress, escapedAllergy string
 
 	// 入力値のエスケープ処理
@@ -176,9 +179,6 @@ func (r *mutationResolver) UpdateInvitee(ctx context.Context, input graph.Update
 		escapedAllergy = html.EscapeString(*input.Allergy)
 	}
 
-	log.Printf("Boolean: %v", input.JoinFlag)
-	log.Printf("アレルギー: %v", &escapedAllergy)
-
 	updated, err := r.IvteeUseCase.UpdateInvitee(
 		&input.ID,
 		&escapedFamilyKj,
@@ -192,6 +192,13 @@ func (r *mutationResolver) UpdateInvitee(ctx context.Context, input graph.Update
 		&fileUrl,
 		input.JoinFlag,
 	)
+
+	// JoinFlagのログ出力
+	if input.JoinFlag != nil {
+		log.Printf("JoinFlagの型: %T, 値: %v", *input.JoinFlag, *input.JoinFlag)
+	} else {
+		log.Printf("JoinFlagはnilです")
+	}
 	if err != nil {
 		err = fmt.Errorf("resolver UpdateInvitee() err %w", err)
 		sentry.CaptureException(err)

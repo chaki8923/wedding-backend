@@ -68,22 +68,54 @@ func (i *inviteeRepository) UpdateInvitee(id string, updatedInvitee *model.Invit
 		return nil, xerrors.Errorf("repository 招待状更新Infra err %w", result.Error)
 	}
 	log.Printf("infra_join!!!: %+v\n", updatedInvitee.JoinFlag)
-	// レコードを更新する
-	invitee.FamilyKj = updatedInvitee.FamilyKj
-	invitee.FirstKj = updatedInvitee.FirstKj
-	invitee.FamilyKj = updatedInvitee.FamilyKj
-	invitee.FamilyKn = updatedInvitee.FamilyKn
-	invitee.Email = updatedInvitee.Email
-	invitee.ZipCode = updatedInvitee.ZipCode
-	invitee.FileURL = updatedInvitee.FileURL
-	invitee.JoinFlag = updatedInvitee.JoinFlag
-	invitee.AddressText = updatedInvitee.AddressText
-	invitee.Allergy = updatedInvitee.Allergy
-	invitee.UpdatedAt = time.Now().Format("2006-01-02 15:04:05")
 
-	if result := i.db.Model(&invitee).Omit("created_at").Updates(invitee); result.Error != nil {
+
+	// レコードを更新する前に現在の状態をログに出力
+	log.Printf("Before update: %+v\n", invitee)
+	// 更新内容をマップに設定
+	updates := map[string]interface{}{
+		"UpdatedAt": time.Now().Format("2006-01-02 15:04:05"),
+	}
+
+	if updatedInvitee.FamilyKj != "" {
+			updates["FamilyKj"] = updatedInvitee.FamilyKj
+	}
+	if updatedInvitee.FirstKj != "" {
+			updates["FirstKj"] = updatedInvitee.FirstKj
+	}
+	if updatedInvitee.FamilyKn != "" {
+		updates["FamilyKn"] = updatedInvitee.FamilyKn
+		}
+	if updatedInvitee.FirstKn != "" {
+			updates["FirstKn"] = updatedInvitee.FirstKn
+	}
+	if updatedInvitee.Email != "" {
+			updates["Email"] = updatedInvitee.Email
+	}
+	if updatedInvitee.ZipCode != "" {
+			updates["ZipCode"] = updatedInvitee.ZipCode
+	}
+	if updatedInvitee.FileURL != "" {
+			updates["FileURL"] = updatedInvitee.FileURL
+	}
+	if updatedInvitee.AddressText != "" {
+			updates["AddressText"] = updatedInvitee.AddressText
+	}
+	if updatedInvitee.Allergy != "" {
+			updates["Allergy"] = updatedInvitee.Allergy
+	}
+
+	// boolean型のフィールドはnilチェックではなくそのまま設定
+	updates["JoinFlag"] = updatedInvitee.JoinFlag
+
+	// 更新後の状態をログに出力
+	log.Printf("After update: %+v\n", updates)
+
+	if result := i.db.Model(&invitee).Omit("created_at").Updates(updates); result.Error != nil {
 		return nil, xerrors.Errorf("repository 招待状更新 err %w", result.Error)
 	}
+
+
 
 	return &invitee, nil
 }

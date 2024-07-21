@@ -5,13 +5,14 @@ import (
 	"time"
 	"log"
 	"context"
+	"github.com/google/uuid"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/chaki8923/wedding-backend/pkg/domain/model"
 	"github.com/chaki8923/wedding-backend/pkg/domain/repository"
 )
 
 type Invitation interface {
-	CreateInvitation(title *string, event_date *string, place *string, comment *string, userId *string, file_url *string) (*model.Invitation, error)
+	CreateInvitation(title *string, event_date *string, place *string, comment *string, userId *string, file_url *string, uu_id *string) (*model.Invitation, error)
 	UpdateInvitation(id *string, title *string, event_date *string, place *string, comment *string) (*model.Invitation, error)
 	GetInvitation() ([]*model.Invitation, error)
 	ShowInvitation(id string) (*model.Invitation, error)
@@ -29,9 +30,10 @@ func NewIvtUseCase(ivtRepo repository.Invitation) Invitation {
 	return &InvitationUseCase
 }
 
-func (i *IvtUseCase) CreateInvitation(title *string, event_date *string, place *string, comment *string, userId *string, file_url *string) (*model.Invitation, error) {
+func (i *IvtUseCase) CreateInvitation(title *string, event_date *string, place *string, comment *string, userId *string, file_url *string, uu_id *string) (*model.Invitation, error) {
 	now := time.Now().Format("2006-01-02 15:04:05")
-
+	// UUIDを生成
+	newUUID := uuid.New().String()
 
 	invitation := model.Invitation{
 		Title:      *title,
@@ -42,6 +44,7 @@ func (i *IvtUseCase) CreateInvitation(title *string, event_date *string, place *
 		UpdatedAt: now,
 		UserID:    *userId,
 		FileURL:   *file_url, // 画像URLを保存
+		UUID:       newUUID, // 生成したUUIDを設定
 	}
 
 	created, err := i.ivtRepo.CreateInvitation(&invitation)
@@ -82,8 +85,8 @@ func (i *IvtUseCase) GetInvitation() ([]*model.Invitation, error) {
 	return invitations, nil
 }
 
-func (i *IvtUseCase) ShowInvitation(id string) (*model.Invitation, error) {
-	invitation, err := i.ivtRepo.ShowInvitation(id)
+func (i *IvtUseCase) ShowInvitation(uu_id string) (*model.Invitation, error) {
+	invitation, err := i.ivtRepo.ShowInvitation(uu_id)
 	if err != nil {
 		return nil, fmt.Errorf("resolver 招待状 err %w", err)
 	}

@@ -11,4 +11,5 @@ type Invitation struct {
 	CreatedAt  string `json:"created_at"`
 	UpdatedAt  string `json:"updated_at"`
 	FileURL    string `json:"file_url"`
+	UUID       string `json:"uu_id"`
 }

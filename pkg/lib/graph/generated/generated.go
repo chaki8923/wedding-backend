@@ -58,6 +58,7 @@ type ComplexityRoot struct {
 		ID        func(childComplexity int) int
 		Place     func(childComplexity int) int
 		Title     func(childComplexity int) int
+		UUID      func(childComplexity int) int
 		UpdatedAt func(childComplexity int) int
 		User      func(childComplexity int) int
 	}
@@ -105,7 +106,7 @@ type ComplexityRoot struct {
 		GetInvitation  func(childComplexity int) int
 		GetInvitee     func(childComplexity int) int
 		GetMessages    func(childComplexity int) int
-		ShowInvitation func(childComplexity int, id string) int
+		ShowInvitation func(childComplexity int, uuID string) int
 		ShowInvitee    func(childComplexity int, id string) int
 	}
 
@@ -151,7 +152,7 @@ type QueryResolver interface {
 	GetInvitation(ctx context.Context) ([]*model.Invitation, error)
 	GetInvitee(ctx context.Context) ([]*model.Invitee, error)
 	GetImages(ctx context.Context) ([]*model.UploadImage, error)
-	ShowInvitation(ctx context.Context, id string) (*model.Invitation, error)
+	ShowInvitation(ctx context.Context, uuID string) (*model.Invitation, error)
 	ShowInvitee(ctx context.Context, id string) (*model.Invitee, error)
 }
 
@@ -222,6 +223,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Invitation.Title(childComplexity), true
+
+	case "Invitation.uu_id":
+		if e.complexity.Invitation.UUID == nil {
+			break
+		}
+
+		return e.complexity.Invitation.UUID(childComplexity), true
 
 	case "Invitation.updated_at":
 		if e.complexity.Invitation.UpdatedAt == nil {
@@ -528,7 +536,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.ShowInvitation(childComplexity, args["id"].(string)), true
+		return e.complexity.Query.ShowInvitation(childComplexity, args["uu_id"].(string)), true
 
 	case "Query.showInvitee":
 		if e.complexity.Query.ShowInvitee == nil {
@@ -796,7 +804,7 @@ type Mutation {
     getInvitation: [Invitation!]!
     getInvitee: [Invitee!]!
     getImages: [UploadImage!]!
-    showInvitation(id: String!): Invitation!
+    showInvitation(uu_id: String!): Invitation!
     showInvitee(id: String!): Invitee!
 }`, BuiltIn: false},
 	{Name: "../schema/type.graphqls", Input: `type Message {
@@ -821,6 +829,7 @@ type Invitation {
   place: String!
   comment: String!
   file_url: String!
+  uu_id: String!
   user: User!
   created_at: String!
   updated_at: String!
@@ -1026,14 +1035,14 @@ func (ec *executionContext) field_Query_showInvitation_args(ctx context.Context,
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
-	if tmp, ok := rawArgs["id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+	if tmp, ok := rawArgs["uu_id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("uu_id"))
 		arg0, err = ec.unmarshalNString2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["id"] = arg0
+	args["uu_id"] = arg0
 	return args, nil
 }
 
@@ -1342,6 +1351,50 @@ func (ec *executionContext) _Invitation_file_url(ctx context.Context, field grap
 }
 
 func (ec *executionContext) fieldContext_Invitation_file_url(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Invitation",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Invitation_uu_id(ctx context.Context, field graphql.CollectedField, obj *model.Invitation) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Invitation_uu_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UUID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Invitation_uu_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Invitation",
 		Field:      field,
@@ -2602,6 +2655,8 @@ func (ec *executionContext) fieldContext_Mutation_createInvitation(ctx context.C
 				return ec.fieldContext_Invitation_comment(ctx, field)
 			case "file_url":
 				return ec.fieldContext_Invitation_file_url(ctx, field)
+			case "uu_id":
+				return ec.fieldContext_Invitation_uu_id(ctx, field)
 			case "user":
 				return ec.fieldContext_Invitation_user(ctx, field)
 			case "created_at":
@@ -2677,6 +2732,8 @@ func (ec *executionContext) fieldContext_Mutation_updateInvitation(ctx context.C
 				return ec.fieldContext_Invitation_comment(ctx, field)
 			case "file_url":
 				return ec.fieldContext_Invitation_file_url(ctx, field)
+			case "uu_id":
+				return ec.fieldContext_Invitation_uu_id(ctx, field)
 			case "user":
 				return ec.fieldContext_Invitation_user(ctx, field)
 			case "created_at":
@@ -3074,6 +3131,8 @@ func (ec *executionContext) fieldContext_Mutation_deleteInvitation(ctx context.C
 				return ec.fieldContext_Invitation_comment(ctx, field)
 			case "file_url":
 				return ec.fieldContext_Invitation_file_url(ctx, field)
+			case "uu_id":
+				return ec.fieldContext_Invitation_uu_id(ctx, field)
 			case "user":
 				return ec.fieldContext_Invitation_user(ctx, field)
 			case "created_at":
@@ -3205,6 +3264,8 @@ func (ec *executionContext) fieldContext_Query_getInvitation(_ context.Context, 
 				return ec.fieldContext_Invitation_comment(ctx, field)
 			case "file_url":
 				return ec.fieldContext_Invitation_file_url(ctx, field)
+			case "uu_id":
+				return ec.fieldContext_Invitation_uu_id(ctx, field)
 			case "user":
 				return ec.fieldContext_Invitation_user(ctx, field)
 			case "created_at":
@@ -3362,7 +3423,7 @@ func (ec *executionContext) _Query_showInvitation(ctx context.Context, field gra
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().ShowInvitation(rctx, fc.Args["id"].(string))
+		return ec.resolvers.Query().ShowInvitation(rctx, fc.Args["uu_id"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3399,6 +3460,8 @@ func (ec *executionContext) fieldContext_Query_showInvitation(ctx context.Contex
 				return ec.fieldContext_Invitation_comment(ctx, field)
 			case "file_url":
 				return ec.fieldContext_Invitation_file_url(ctx, field)
+			case "uu_id":
+				return ec.fieldContext_Invitation_uu_id(ctx, field)
 			case "user":
 				return ec.fieldContext_Invitation_user(ctx, field)
 			case "created_at":
@@ -6265,6 +6328,11 @@ func (ec *executionContext) _Invitation(ctx context.Context, sel ast.SelectionSe
 			}
 		case "file_url":
 			out.Values[i] = ec._Invitation_file_url(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "uu_id":
+			out.Values[i] = ec._Invitation_uu_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&out.Invalids, 1)
 			}

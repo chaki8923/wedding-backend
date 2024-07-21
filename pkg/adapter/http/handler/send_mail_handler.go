@@ -49,7 +49,7 @@ func (s *SendMailHandler) SendMailHandler() echo.HandlerFunc {
 		}
 
 
-		userId, err := s.SendMailUseCase.SendMail(&fv.From, &fv.To, &fv.Subject, &fv.Body)
+		userId, err := s.SendMailUseCase.SendMail(&fv.To, &fv.From, &fv.Subject, &fv.Body)
 		if err != nil {
 			return fmt.Errorf("signup failed err: %w", err)
 		}

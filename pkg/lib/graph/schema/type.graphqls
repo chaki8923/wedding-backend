@@ -20,6 +20,7 @@ type Invitation {
   place: String!
   comment: String!
   file_url: String!
+  uu_id: String!
   user: User!
   created_at: String!
   updated_at: String!

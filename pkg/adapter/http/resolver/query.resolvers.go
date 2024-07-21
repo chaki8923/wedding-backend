@@ -65,8 +65,8 @@ func (r *queryResolver) GetImages(ctx context.Context) ([]*model.UploadImage, er
 }
 
 // ShowInvitation is the resolver for the showInvitation field.
-func (r *queryResolver) ShowInvitation(ctx context.Context, id string) (*model.Invitation, error) {
-	invitation, err := r.IvtUseCase.ShowInvitation(id)
+func (r *queryResolver) ShowInvitation(ctx context.Context, uuID string) (*model.Invitation, error) {
+	invitation, err := r.IvtUseCase.ShowInvitation(uuID)
 	if err != nil {
 		err = fmt.Errorf("resolver 招待状詳細() err %w", err)
 		sentry.CaptureException(err)

@@ -10,6 +10,7 @@ require (
 	github.com/go-playground/validator v9.31.0+incompatible
 	github.com/golang-jwt/jwt/v4 v4.4.3
 	github.com/golang/mock v1.6.0
+	github.com/google/uuid v1.6.0
 	github.com/graph-gophers/dataloader v5.0.0+incompatible
 	github.com/joho/godotenv v1.5.1
 	github.com/labstack/echo/v4 v4.9.0
@@ -28,7 +29,6 @@ require (
 	github.com/go-sql-driver/mysql v1.7.0 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
-	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect

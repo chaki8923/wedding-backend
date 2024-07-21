@@ -6,4 +6,5 @@ import (
 
 type SendMail interface {
 	SendMail(mail *model.SendMail) (*model.SendMail, error)
+	FindInviteeByEmail(email string) (*model.Invitee, error)
 }
