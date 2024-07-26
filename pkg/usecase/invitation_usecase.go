@@ -12,7 +12,7 @@ import (
 )
 
 type Invitation interface {
-	CreateInvitation(title *string, event_date *string, place *string, comment *string, userId *string, file_url *string, uu_id *string) (*model.Invitation, error)
+	CreateInvitation(title *string, event_date *string, place *string, comment *string, userId *string, file_url *string) (*model.Invitation, error)
 	UpdateInvitation(id *string, title *string, event_date *string, place *string, comment *string) (*model.Invitation, error)
 	GetInvitation() ([]*model.Invitation, error)
 	ShowInvitation(id string) (*model.Invitation, error)
@@ -30,7 +30,7 @@ func NewIvtUseCase(ivtRepo repository.Invitation) Invitation {
 	return &InvitationUseCase
 }
 
-func (i *IvtUseCase) CreateInvitation(title *string, event_date *string, place *string, comment *string, userId *string, file_url *string, uu_id *string) (*model.Invitation, error) {
+func (i *IvtUseCase) CreateInvitation(title *string, event_date *string, place *string, comment *string, userId *string, file_url *string) (*model.Invitation, error) {
 	now := time.Now().Format("2006-01-02 15:04:05")
 	// UUIDを生成
 	newUUID := uuid.New().String()

@@ -83,9 +83,9 @@ func (i *invitationRepository) UpdateInvitation(id string, updatedInvitation *mo
 	return &invitation, nil
 }
 
-func (i *invitationRepository) ShowInvitation(uu_id string) (*model.Invitation, error) {
+func (i *invitationRepository) ShowInvitation(uuid string) (*model.Invitation, error) {
 	var record model.Invitation
-	if result := i.db.Where("uu_id = ?", uu_id).First(&record); result.Error != nil {
+	if result := i.db.Where("uuid = ?", uuid).First(&record); result.Error != nil {
 		return nil, xerrors.Errorf("repository  招待状詳細取得 err %w", result.Error)
 	}
 

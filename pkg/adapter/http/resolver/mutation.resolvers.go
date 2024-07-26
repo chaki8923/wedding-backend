@@ -14,7 +14,6 @@ import (
 	"github.com/chaki8923/wedding-backend/pkg/domain/model/graph"
 	"github.com/chaki8923/wedding-backend/pkg/lib/graph/generated"
 	sentry "github.com/getsentry/sentry-go"
-	"github.com/google/uuid"
 )
 
 // CreateMessage is the resolver for the createMessage field.
@@ -58,7 +57,7 @@ func (r *mutationResolver) CreateInvitation(ctx context.Context, input graph.New
 	escapedPlace := html.EscapeString(input.Place)
 	escapedComment := html.EscapeString(input.Comment)
 	// UUIDを生成
-	newUUID := uuid.New().String()
+
 
 	// 招待状の作成
 	created, err := r.IvtUseCase.CreateInvitation(
@@ -68,7 +67,6 @@ func (r *mutationResolver) CreateInvitation(ctx context.Context, input graph.New
 		&escapedComment,
 		&input.UserID,
 		&fileUrl,
-		&newUUID,
 	)
 	if err != nil {
 		err = fmt.Errorf("resolver CreateInvitation() err %w", err)
