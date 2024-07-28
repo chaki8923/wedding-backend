@@ -120,9 +120,9 @@ func (i *inviteeRepository) UpdateInvitee(id string, updatedInvitee *model.Invit
 	return &invitee, nil
 }
 
-func (i *inviteeRepository) ShowInvitee(id string) (*model.Invitee, error) {
+func (i *inviteeRepository) ShowInvitee(uuid string) (*model.Invitee, error) {
 	var record model.Invitee
-	if result := i.db.Where("id = ?", id).First(&record); result.Error != nil {
+	if result := i.db.Where("uuid = ?", uuid).First(&record); result.Error != nil {
 		return nil, xerrors.Errorf("repository  招待状詳細取得 err %w", result.Error)
 	}
 

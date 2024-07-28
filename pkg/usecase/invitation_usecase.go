@@ -15,7 +15,7 @@ type Invitation interface {
 	CreateInvitation(title *string, event_date *string, place *string, comment *string, userId *string, file_url *string) (*model.Invitation, error)
 	UpdateInvitation(id *string, title *string, event_date *string, place *string, comment *string) (*model.Invitation, error)
 	GetInvitation() ([]*model.Invitation, error)
-	ShowInvitation(id string) (*model.Invitation, error)
+	ShowInvitation(uu_id string) (*model.Invitation, error)
 	DeleteInvitation(id string) (*model.Invitation, error)
 	UploadFileToS3(ctx context.Context, file_url graphql.Upload) (string, error)
 

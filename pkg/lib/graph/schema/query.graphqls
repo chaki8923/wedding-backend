@@ -4,5 +4,5 @@ type Query {
     getInvitee: [Invitee!]!
     getImages: [UploadImage!]!
     showInvitation(uuid: String!): Invitation!
-    showInvitee(id: String!): Invitee!
+    showInvitee(uuid: String!): Invitee!
 }

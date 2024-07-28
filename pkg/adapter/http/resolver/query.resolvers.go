@@ -76,8 +76,8 @@ func (r *queryResolver) ShowInvitation(ctx context.Context, uuid string) (*model
 }
 
 // ShowInvitee is the resolver for the showInvitee field.
-func (r *queryResolver) ShowInvitee(ctx context.Context, id string) (*model.Invitee, error) {
-	invitee, err := r.IvteeUseCase.ShowInvitee(id)
+func (r *queryResolver) ShowInvitee(ctx context.Context, uuid string) (*model.Invitee, error) {
+	invitee, err := r.IvteeUseCase.ShowInvitee(uuid)
 	if err != nil {
 		err = fmt.Errorf("resolver 招待者詳細() err %w", err)
 		sentry.CaptureException(err)

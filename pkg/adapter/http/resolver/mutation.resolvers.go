@@ -58,7 +58,6 @@ func (r *mutationResolver) CreateInvitation(ctx context.Context, input graph.New
 	escapedComment := html.EscapeString(input.Comment)
 	// UUIDを生成
 
-
 	// 招待状の作成
 	created, err := r.IvtUseCase.CreateInvitation(
 		&escapedTitle,

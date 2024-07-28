@@ -5,6 +5,7 @@ import (
 	"time"
 	"log"
 	"context"
+	"github.com/google/uuid"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/chaki8923/wedding-backend/pkg/domain/model"
 	"github.com/chaki8923/wedding-backend/pkg/domain/repository"
@@ -37,7 +38,7 @@ type Invitee interface {
 		join_flag *bool,
 		) (*model.Invitee, error)
 	GetInvitee() ([]*model.Invitee, error)
-	ShowInvitee(id string) (*model.Invitee, error)
+	ShowInvitee(uu_id string) (*model.Invitee, error)
 	DeleteInvitee(id string) (*model.Invitee, error)
 	UploadFileToS3(ctx context.Context, file_url graphql.Upload) (string, error)
 
@@ -65,7 +66,8 @@ func (i *IvteeUseCase) CreateInvitee(
 	file_url *string) (*model.Invitee, error) {
 	now := time.Now().Format("2006-01-02 15:04:05")
 
-
+	// UUIDを生成
+	newUUID := uuid.New().String()
 	invitee := model.Invitee{
 		FamilyKj:      *family_kj,
 		FirstKj:  *first_kj,
@@ -79,6 +81,8 @@ func (i *IvteeUseCase) CreateInvitee(
 		CreatedAt: now,
 		UpdatedAt: now,
 		FileURL:   *file_url, // 画像URLを保存
+		UUID:       newUUID, // 生成したUUIDを設定
+
 	}
 
 	created, err := i.ivteeRepo.CreateInvitee(&invitee)
@@ -137,8 +141,8 @@ func (i *IvteeUseCase) GetInvitee() ([]*model.Invitee, error) {
 	return invitee, nil
 }
 
-func (i *IvteeUseCase) ShowInvitee(id string) (*model.Invitee, error) {
-	invitee, err := i.ivteeRepo.ShowInvitee(id)
+func (i *IvteeUseCase) ShowInvitee(uu_id string) (*model.Invitee, error) {
+	invitee, err := i.ivteeRepo.ShowInvitee(uu_id)
 	if err != nil {
 		return nil, fmt.Errorf("resolver 招待状 err %w", err)
 	}

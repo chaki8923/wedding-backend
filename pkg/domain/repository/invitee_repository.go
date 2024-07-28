@@ -11,6 +11,6 @@ type Invitee interface {
 	GetInvitee() ([]*model.Invitee, error)
 	CreateInvitee(invitee *model.Invitee) (*model.Invitee, error)
 	UpdateInvitee(id string, invitee *model.Invitee) (*model.Invitee, error)
-	ShowInvitee(id string) (*model.Invitee, error)
+	ShowInvitee(uuid string) (*model.Invitee, error)
 	DeleteInvitee(id string) (*model.Invitee, error)
 }

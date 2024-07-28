@@ -75,6 +75,7 @@ type ComplexityRoot struct {
 		FirstKn     func(childComplexity int) int
 		ID          func(childComplexity int) int
 		JoinFlag    func(childComplexity int) int
+		UUID        func(childComplexity int) int
 		UpdatedAt   func(childComplexity int) int
 		User        func(childComplexity int) int
 		ZipCode     func(childComplexity int) int
@@ -107,7 +108,7 @@ type ComplexityRoot struct {
 		GetInvitee     func(childComplexity int) int
 		GetMessages    func(childComplexity int) int
 		ShowInvitation func(childComplexity int, uuid string) int
-		ShowInvitee    func(childComplexity int, id string) int
+		ShowInvitee    func(childComplexity int, uuid string) int
 	}
 
 	UploadImage struct {
@@ -153,7 +154,7 @@ type QueryResolver interface {
 	GetInvitee(ctx context.Context) ([]*model.Invitee, error)
 	GetImages(ctx context.Context) ([]*model.UploadImage, error)
 	ShowInvitation(ctx context.Context, uuid string) (*model.Invitation, error)
-	ShowInvitee(ctx context.Context, id string) (*model.Invitee, error)
+	ShowInvitee(ctx context.Context, uuid string) (*model.Invitee, error)
 }
 
 type executableSchema struct {
@@ -321,6 +322,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Invitee.JoinFlag(childComplexity), true
+
+	case "Invitee.uuid":
+		if e.complexity.Invitee.UUID == nil {
+			break
+		}
+
+		return e.complexity.Invitee.UUID(childComplexity), true
 
 	case "Invitee.updated_at":
 		if e.complexity.Invitee.UpdatedAt == nil {
@@ -548,7 +556,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.ShowInvitee(childComplexity, args["id"].(string)), true
+		return e.complexity.Query.ShowInvitee(childComplexity, args["uuid"].(string)), true
 
 	case "UploadImage.comment":
 		if e.complexity.UploadImage.Comment == nil {
@@ -805,7 +813,7 @@ type Mutation {
     getInvitee: [Invitee!]!
     getImages: [UploadImage!]!
     showInvitation(uuid: String!): Invitation!
-    showInvitee(id: String!): Invitee!
+    showInvitee(uuid: String!): Invitee!
 }`, BuiltIn: false},
 	{Name: "../schema/type.graphqls", Input: `type Message {
   id: ID!
@@ -845,6 +853,7 @@ type Invitee {
   zip_code: String!
   address_text: String!
   file_url: String!
+  uuid: String!
   join_flag: Boolean!
   allergy: String!
   user: User!
@@ -1050,14 +1059,14 @@ func (ec *executionContext) field_Query_showInvitee_args(ctx context.Context, ra
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
-	if tmp, ok := rawArgs["id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+	if tmp, ok := rawArgs["uuid"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("uuid"))
 		arg0, err = ec.unmarshalNString2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["id"] = arg0
+	args["uuid"] = arg0
 	return args, nil
 }
 
@@ -1945,6 +1954,50 @@ func (ec *executionContext) fieldContext_Invitee_file_url(_ context.Context, fie
 	return fc, nil
 }
 
+func (ec *executionContext) _Invitee_uuid(ctx context.Context, field graphql.CollectedField, obj *model.Invitee) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Invitee_uuid(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UUID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Invitee_uuid(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Invitee",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Invitee_join_flag(ctx context.Context, field graphql.CollectedField, obj *model.Invitee) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Invitee_join_flag(ctx, field)
 	if err != nil {
@@ -2815,6 +2868,8 @@ func (ec *executionContext) fieldContext_Mutation_createInvitee(ctx context.Cont
 				return ec.fieldContext_Invitee_address_text(ctx, field)
 			case "file_url":
 				return ec.fieldContext_Invitee_file_url(ctx, field)
+			case "uuid":
+				return ec.fieldContext_Invitee_uuid(ctx, field)
 			case "join_flag":
 				return ec.fieldContext_Invitee_join_flag(ctx, field)
 			case "allergy":
@@ -2900,6 +2955,8 @@ func (ec *executionContext) fieldContext_Mutation_updateInvitee(ctx context.Cont
 				return ec.fieldContext_Invitee_address_text(ctx, field)
 			case "file_url":
 				return ec.fieldContext_Invitee_file_url(ctx, field)
+			case "uuid":
+				return ec.fieldContext_Invitee_uuid(ctx, field)
 			case "join_flag":
 				return ec.fieldContext_Invitee_join_flag(ctx, field)
 			case "allergy":
@@ -3052,6 +3109,8 @@ func (ec *executionContext) fieldContext_Mutation_deleteInvitee(ctx context.Cont
 				return ec.fieldContext_Invitee_address_text(ctx, field)
 			case "file_url":
 				return ec.fieldContext_Invitee_file_url(ctx, field)
+			case "uuid":
+				return ec.fieldContext_Invitee_uuid(ctx, field)
 			case "join_flag":
 				return ec.fieldContext_Invitee_join_flag(ctx, field)
 			case "allergy":
@@ -3336,6 +3395,8 @@ func (ec *executionContext) fieldContext_Query_getInvitee(_ context.Context, fie
 				return ec.fieldContext_Invitee_address_text(ctx, field)
 			case "file_url":
 				return ec.fieldContext_Invitee_file_url(ctx, field)
+			case "uuid":
+				return ec.fieldContext_Invitee_uuid(ctx, field)
 			case "join_flag":
 				return ec.fieldContext_Invitee_join_flag(ctx, field)
 			case "allergy":
@@ -3500,7 +3561,7 @@ func (ec *executionContext) _Query_showInvitee(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().ShowInvitee(rctx, fc.Args["id"].(string))
+		return ec.resolvers.Query().ShowInvitee(rctx, fc.Args["uuid"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3543,6 +3604,8 @@ func (ec *executionContext) fieldContext_Query_showInvitee(ctx context.Context, 
 				return ec.fieldContext_Invitee_address_text(ctx, field)
 			case "file_url":
 				return ec.fieldContext_Invitee_file_url(ctx, field)
+			case "uuid":
+				return ec.fieldContext_Invitee_uuid(ctx, field)
 			case "join_flag":
 				return ec.fieldContext_Invitee_join_flag(ctx, field)
 			case "allergy":
@@ -6458,6 +6521,11 @@ func (ec *executionContext) _Invitee(ctx context.Context, sel ast.SelectionSet, 
 			}
 		case "file_url":
 			out.Values[i] = ec._Invitee_file_url(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "uuid":
+			out.Values[i] = ec._Invitee_uuid(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
