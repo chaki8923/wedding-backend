@@ -1,6 +1,7 @@
 type Query {
     getMessages: [Message!]!
     getInvitation: [Invitation!]!
+    getAllergy: [Allergy!]!
     getInvitee: [Invitee!]!
     getImages: [UploadImage!]!
     showInvitation(uuid: String!): Invitation!

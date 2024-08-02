@@ -38,6 +38,19 @@ func (r *queryResolver) GetInvitation(ctx context.Context) ([]*model.Invitation,
 	return invitation, nil
 }
 
+// GetAllergy is the resolver for the getAllergy field.
+func (r *queryResolver) GetAllergy(ctx context.Context) ([]*model.Allergy, error) {
+	allergies, err := r.AgyUseCase.GetAllergy()
+
+	if err != nil {
+		err = fmt.Errorf("resolver Invitee() err %w", err)
+		sentry.CaptureException(err)
+		return nil, err
+	}
+
+	return allergies, nil
+}
+
 // GetInvitee is the resolver for the getInvitee field.
 func (r *queryResolver) GetInvitee(ctx context.Context) ([]*model.Invitee, error) {
 	invitee, err := r.IvteeUseCase.GetInvitee()

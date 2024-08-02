@@ -16,4 +16,5 @@ type Resolver struct {
 	IvtUseCase usecase.Invitation
 	IvteeUseCase usecase.Invitee
 	UpdUseCase usecase.Upload
+	AgyUseCase usecase.Allergy
 }

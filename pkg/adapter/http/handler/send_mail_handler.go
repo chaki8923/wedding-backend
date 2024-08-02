@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"log"
 	"fmt"
 	"net/http"
 	"github.com/chaki8923/wedding-backend/pkg/usecase"
@@ -38,8 +37,6 @@ func NewSendMailHandler(su usecase.SendMail) SendMail {
 }
 
 func (s *SendMailHandler) SendMailHandler() echo.HandlerFunc {
-	log.Printf("mailhandler入った-------------------------")
-
 	return func(c echo.Context) (err error) {
 		var fv = &usecase.MailFormValue{
 			To:    c.FormValue("to"),
@@ -47,7 +44,6 @@ func (s *SendMailHandler) SendMailHandler() echo.HandlerFunc {
 			Subject: c.FormValue("subject"),
 			Body: c.FormValue("body"),
 		}
-
 
 		userId, err := s.SendMailUseCase.SendMail(&fv.To, &fv.From, &fv.Subject, &fv.Body)
 		if err != nil {

@@ -32,7 +32,7 @@ func main() {
 	if err != nil {
 		sentry.CaptureException(fmt.Errorf("initDb err: %w", err))
 	}
-	log.Printf("DI手前-------------------------")
+
 	// S3設定
 	sess, err := session.NewSession(&aws.Config{
 		Region: aws.String("ap-northeast-1"),
@@ -51,12 +51,14 @@ func main() {
 	upr := infra.NewUploadRepository(db,s3Client, "weddingnet")
 	ur := infra.NewUserRepository(db, c)
 	sr := infra.NewSendMailRepository(db)
+	agr := infra.NewAllergyRepository(db)
 	// repositoryを注入
 	au := usecase.NewAuthUseCase(ur, c)
 	su := usecase.NewMailUseCase(sr)
 	mu := usecase.NewMsgUseCase(mr)
 	uu := usecase.NewUserUseCase(ur)
 	iu := usecase.NewIvtUseCase(ir)
+	agu := usecase.NewAgyUseCase(agr)
 	ivu := usecase.NewIvteeUseCase(ivr)
 	upu := usecase.NewUploadUseCase(upr)
 
@@ -65,11 +67,9 @@ func main() {
 	mh := handler.NewSendMailHandler(su)
 	lh := handler.NewLoginHandler(au)
 	sh := handler.NewSignHandler(au)
-	gh := handler.NewGraphHandler(mu, uu, iu, ivu, upu)
+	gh := handler.NewGraphHandler(mu, uu, iu, ivu, upu, agu)
 	ph := playground.Handler("GraphQL", "/query")
 	am := authMiddleware.NewAuthMiddleware(au)
-	fmt.Printf("IRです%+v\n", ir)
-	fmt.Printf("IUです%+v\n", iu)
 	// Rooting
 	r := route.NewInitRoute(ch, lh, sh, mh, gh, ph, am)
 	_, err = r.InitRouting(c)

@@ -31,7 +31,6 @@ func NewMailUseCase(mailRepo repository.SendMail) SendMail {
 	return &SendMailUseCase
 }
 
-
 func (m *MailUseCase) SendMail(to *string, from *string, subject *string, body *string) (*model.SendMail, error) {
 	if to == nil || from == nil || subject == nil || body == nil {
 		return nil, errors.New("one or more parameters are nil")
@@ -57,14 +56,19 @@ func (m *MailUseCase) SendMail(to *string, from *string, subject *string, body *
 				return nil, fmt.Errorf("failed to find invitee with email %s: %w", recipient, err)
 			}
 
-			log.Printf("招待者情報: %+v\n", invitee)
 			recipientName := invitee.FamilyKj + " " + invitee.FirstKj
-		  customBody := fmt.Sprintf("%s 様へ\n\n%s", recipientName, *body)
+		  customBody := fmt.Sprintf("%s 様へ\n\n%s", recipientName)
+			inviteeLink := "https://localhost:3443/invitee_detail?uuid=" + invitee.UUID + "&inv_id=" + *body
 
 			mailMessage := []byte("To: " + recipient + "\r\n" +
 					"Subject: " + *subject + "\r\n" +
 					"\r\n" +
-					customBody + "\r\n")
+					customBody + 
+					"\r\n" +
+					"以下のリンクより出欠を更新してください" +
+					"\r\n" +
+					inviteeLink +
+					"\r\n")
 				log.Printf("Sending email to: %s\n", recipient)
 			// SMTPサーバ接続
 			auth := smtp.PlainAuth("", cfg.GoogleAccount, cfg.GoogleApiKey, "smtp.gmail.com")
