@@ -1,9 +1,10 @@
 -- +goose Up
 CREATE TABLE allergies (
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    name VARCHAR(255) DEFAULT NULL,
+    name VARCHAR(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE INDEX allergy_id on allergies (id);
+
+CREATE INDEX allergy_id ON allergies (id);
 
 INSERT INTO allergies (name)
 VALUES
@@ -37,5 +38,5 @@ VALUES
     ('ゼラチン');
 
 -- +goose Down
-DROP INDEX allergy_id;
-DROP TABLE allergies;
+DROP INDEX allergy_id ON allergies;
+DROP TABLE IF EXISTS allergies;
