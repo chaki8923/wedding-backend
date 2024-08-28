@@ -54,7 +54,7 @@ func (i *InitRoute) InitRouting(cfg *config.Config) (*echo.Echo, error) {
 		middleware.Logger(),
 		middleware.Recover(),
 		middleware.CORSWithConfig(middleware.CORSConfig{
-			AllowOrigins:     []string{cfg.FrontURL, cfg.LocalFrontURL},
+			AllowOrigins:     []string{cfg.FrontURL, cfg.LocalFrontURL, cfg.ProFrontURL},
 			AllowCredentials: true,
 		}),
 		middleware.CSRFWithConfig(middleware.CSRFConfig{
