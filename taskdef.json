@@ -1,5 +1,5 @@
 {
-  "taskDefinitionArn": "arn:aws:ecs:ap-northeast-1:492343355553:task-definition/api-dev-task-definition:10",
+  "taskDefinitionArn": "arn:aws:ecs:ap-northeast-1:492343355553:task-definition/api-dev-task-definition:15",
   "containerDefinitions": [
     {
       "name": "api-container",
@@ -88,7 +88,7 @@
   "taskRoleArn": "arn:aws:iam::492343355553:role/api-dev-task-role",
   "executionRoleArn": "arn:aws:iam::492343355553:role/api-dev-task-execution-role",
   "networkMode": "awsvpc",
-  "revision": 10,
+  "revision": 15,
   "volumes": [],
   "status": "ACTIVE",
   "requiresAttributes": [
@@ -142,7 +142,7 @@
   ],
   "cpu": "256",
   "memory": "512",
-  "registeredAt": "2024-08-25T08:14:20.660Z",
+  "registeredAt": "2024-08-30T10:54:21.536Z",
   "registeredBy": "arn:aws:iam::492343355553:user/hackathon-user",
   "tags": [
     {
