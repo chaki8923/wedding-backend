@@ -11,6 +11,7 @@ type Config struct {
 	AppDomain  string `env:"API_APP_DOMAIN" envDefault:""`
 	Env        string `env:"API_ENV" envDefault:"dev"`
 	Port       string `env:"API_PORT" envDefault:"8080"`
+	ProFrontURL   string `env:"PRO_FRONT_URL" envDefault:"https://front.wedding-hackathon.com/"`
 	FrontURL   string `env:"API_FRONT_URL" envDefault:"https://localhost:3443"`
 	LocalFrontURL   string `env:"API_FRONT_URL" envDefault:"http://localhost:3000"`
 	DBHost     string `env:"API_DB_HOST" envDefault:"172.30.0.3"`
