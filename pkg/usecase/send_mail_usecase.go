@@ -57,10 +57,10 @@ func (m *MailUseCase) SendMail(to *string, from *string, subject *string, body *
 			}
 
 			recipientName := invitee.FamilyKj + " " + invitee.FirstKj
-		  customBody := fmt.Sprintf("%s 様へ\n\n%s", recipientName)
-			// inviteeLink := "https://localhost:3443/invitee_detail?uuid=" + invitee.UUID + "&inv_id=" + *body
+		    customBody := fmt.Sprintf("%s 様へ\n\n%s", recipientName)
+			inviteeLink := "https://localhost:3443/invitee_detail?uuid=" + invitee.UUID + "&inv_id=" + *body
 			// 本番
-			inviteeLink := "https://front.wedding-hackathon.com/invitee_detail?uuid=" + invitee.UUID + "&inv_id=" + *body
+			// inviteeLink := "https://front.wedding-hackathon.com/invitee_detail?uuid=" + invitee.UUID + "&inv_id=" + *body
 
 			mailMessage := []byte("To: " + recipient + "\r\n" +
 					"Subject: " + *subject + "\r\n" +
