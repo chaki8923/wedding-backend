@@ -3,7 +3,6 @@ package route
 import (
 	"fmt"
 	"net/http"
-	"strings"
 
 	"github.com/chaki8923/wedding-backend/pkg/adapter/http/handler"
 	authMiddleware "github.com/chaki8923/wedding-backend/pkg/adapter/http/middleware"
@@ -44,38 +43,37 @@ func NewInitRoute(
 func (i *InitRoute) InitRouting(cfg *config.Config) (*echo.Echo, error) {
 	e := echo.New()
 
-	cookieDomain := ""
-	if cfg.Env == "prd" {
-		cookieDomain = "." + cfg.AppDomain
-	}
+	// cookieDomain := ""
+	// if cfg.Env == "prd" {
+	// 	cookieDomain = "." + cfg.AppDomain
+	// }
 
 	// middleware
 	e.Use(
 		middleware.Logger(),
 		middleware.Recover(),
-		middleware.CORSWithConfig(middleware.CORSConfig{
-			AllowOrigins:     []string{cfg.FrontURL, cfg.LocalFrontURL, cfg.ProFrontURL},
-			AllowCredentials: true,
-		}),
-		middleware.CSRFWithConfig(middleware.CSRFConfig{
-			CookiePath: "/",
-			// CookieSecure:   true,
-			CookieDomain: cookieDomain,
-			// CookieSameSite: http.SameSiteNoneMode,
-			CookieSameSite: http.SameSiteDefaultMode,
-			Skipper: func(c echo.Context) bool {
-				if strings.Contains(c.Request().URL.Path, "/healthcheck") {
-					return true
-				}
-				if strings.Contains(c.Request().URL.Path, "/playground") {
-					return true
-				}
-				if strings.Contains(c.Request().URL.Path, "/query") {
-					return true
-				}
-				return false
-			},
-		}),
+		// middleware.CORSWithConfig(middleware.CORSConfig{
+		// 	AllowOrigins:     []string{cfg.FrontURL, cfg.LocalFrontURL},
+		// 	AllowCredentials: true,
+		// }),
+		// middleware.CSRFWithConfig(middleware.CSRFConfig{
+		// 	CookiePath:     "/",
+		// 	CookieSecure:   true,
+		// 	CookieDomain:   cookieDomain,
+		// 	CookieSameSite: http.SameSiteNoneMode,
+		// 	Skipper: func(c echo.Context) bool {
+		// 		if strings.Contains(c.Request().URL.Path, "/healthcheck") {
+		// 			return true
+		// 		}
+		// 		if strings.Contains(c.Request().URL.Path, "/playground") {
+		// 			return true
+		// 		}
+		// 		if strings.Contains(c.Request().URL.Path, "/query") {
+		// 			return true
+		// 		}
+		// 		return false
+		// 	},
+		// }),
 		i.Am.AuthMiddleware,
 	)
 
