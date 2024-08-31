@@ -58,10 +58,11 @@ func (i *InitRoute) InitRouting(cfg *config.Config) (*echo.Echo, error) {
 			AllowCredentials: true,
 		}),
 		middleware.CSRFWithConfig(middleware.CSRFConfig{
-			CookiePath:     "/",
-			CookieSecure:   true,
-			CookieDomain:   cookieDomain,
-			CookieSameSite: http.SameSiteNoneMode,
+			CookiePath: "/",
+			// CookieSecure:   true,
+			CookieDomain: cookieDomain,
+			// CookieSameSite: http.SameSiteNoneMode,
+			CookieSameSite: http.SameSiteDefaultMode,
 			Skipper: func(c echo.Context) bool {
 				if strings.Contains(c.Request().URL.Path, "/healthcheck") {
 					return true
