@@ -1,5 +1,5 @@
 {
-  "taskDefinitionArn": "arn:aws:ecs:ap-northeast-1:00000000000:task-definition/api-dev-task-definition:25",
+  "taskDefinitionArn": "arn:aws:ecs:ap-northeast-1:492343355553:task-definition/api-dev-task-definition:15",
   "containerDefinitions": [
     {
       "name": "api-container",
@@ -29,39 +29,39 @@
       "secrets": [
         {
           "name": "API_ENV",
-          "valueFrom": "arn:aws:ssm:ap-northeast-1:00000000000:parameter/API_ENV"
+          "valueFrom": "arn:aws:ssm:ap-northeast-1:492343355553:parameter/API_ENV"
         },
         {
           "name": "API_FRONT_URL",
-          "valueFrom": "arn:aws:ssm:ap-northeast-1:00000000000:parameter/API_FRONT_URL"
+          "valueFrom": "arn:aws:ssm:ap-northeast-1:492343355553:parameter/API_FRONT_URL"
         },
         {
           "name": "API_DB_HOST",
-          "valueFrom": "arn:aws:ssm:ap-northeast-1:00000000000:parameter/API_DB_HOST"
+          "valueFrom": "arn:aws:ssm:ap-northeast-1:492343355553:parameter/API_DB_HOST"
         },
         {
           "name": "API_DB_NAME",
-          "valueFrom": "arn:aws:ssm:ap-northeast-1:00000000000:parameter/API_DB_NAME"
+          "valueFrom": "arn:aws:ssm:ap-northeast-1:492343355553:parameter/API_DB_NAME"
         },
         {
           "name": "API_DB_USER",
-          "valueFrom": "arn:aws:ssm:ap-northeast-1:00000000000:parameter/API_DB_USER"
+          "valueFrom": "arn:aws:ssm:ap-northeast-1:492343355553:parameter/API_DB_USER"
         },
         {
           "name": "API_DB_PASS",
-          "valueFrom": "arn:aws:ssm:ap-northeast-1:00000000000:parameter/API_DB_PASS"
+          "valueFrom": "arn:aws:ssm:ap-northeast-1:492343355553:parameter/API_DB_PASS"
         },
         {
           "name": "API_DB_PORT",
-          "valueFrom": "arn:aws:ssm:ap-northeast-1:00000000000:parameter/API_DB_PORT"
+          "valueFrom": "arn:aws:ssm:ap-northeast-1:492343355553:parameter/API_DB_PORT"
         },
         {
           "name": "SENTRY_DSN",
-          "valueFrom": "arn:aws:ssm:ap-northeast-1:00000000000:parameter/API_SENTRY_DSN"
+          "valueFrom": "arn:aws:ssm:ap-northeast-1:492343355553:parameter/API_SENTRY_DSN"
         },
         {
           "name": "API_APP_DOMAIN",
-          "valueFrom": "arn:aws:ssm:ap-northeast-1:00000000000:parameter/API_APP_DOMAIN"
+          "valueFrom": "arn:aws:ssm:ap-northeast-1:492343355553:parameter/API_APP_DOMAIN"
         }
       ],
       "readonlyRootFilesystem": false,
@@ -80,14 +80,15 @@
         },
         "secretOptions": []
       },
-      "systemControls": []
+      "systemControls": [],
+      "credentialSpecs": []
     }
   ],
   "family": "api-dev-task-definition",
-  "taskRoleArn": "arn:aws:iam::00000000000:role/api-dev-task-role",
-  "executionRoleArn": "arn:aws:iam::00000000000:role/api-dev-task-execution-role",
+  "taskRoleArn": "arn:aws:iam::492343355553:role/api-dev-task-role",
+  "executionRoleArn": "arn:aws:iam::492343355553:role/api-dev-task-execution-role",
   "networkMode": "awsvpc",
-  "revision": 25,
+  "revision": 15,
   "volumes": [],
   "status": "ACTIVE",
   "requiresAttributes": [
@@ -141,8 +142,8 @@
   ],
   "cpu": "256",
   "memory": "512",
-  "registeredAt": "2023-05-11T21:53:50.928Z",
-  "registeredBy": "arn:aws:iam::00000000000:user/admin-user",
+  "registeredAt": "2024-08-30T10:54:21.536Z",
+  "registeredBy": "arn:aws:iam::492343355553:user/hackathon-user",
   "tags": [
     {
       "key": "Environment",

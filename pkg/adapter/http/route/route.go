@@ -3,16 +3,15 @@ package route
 import (
 	"fmt"
 	"net/http"
-	"strings"
 
-	"github.com/getsentry/sentry-go"
-	"golang.org/x/xerrors"
 	"github.com/chaki8923/wedding-backend/pkg/adapter/http/handler"
 	authMiddleware "github.com/chaki8923/wedding-backend/pkg/adapter/http/middleware"
 	"github.com/chaki8923/wedding-backend/pkg/lib/config"
 	"github.com/chaki8923/wedding-backend/pkg/lib/validator"
+	"github.com/getsentry/sentry-go"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"golang.org/x/xerrors"
 )
 
 type Route interface {
@@ -30,12 +29,12 @@ type InitRoute struct {
 }
 
 func NewInitRoute(
-	ch handler.Csrf, 
-	lh handler.Login, 
-	sh handler.Signup, 
-	mh handler.SendMail, 
-	gh handler.Graph, 
-	ph http.HandlerFunc, 
+	ch handler.Csrf,
+	lh handler.Login,
+	sh handler.Signup,
+	mh handler.SendMail,
+	gh handler.Graph,
+	ph http.HandlerFunc,
 	am authMiddleware.Auth) Route {
 	InitRoute := InitRoute{ch, lh, sh, mh, gh, ph, am}
 	return &InitRoute
@@ -44,37 +43,37 @@ func NewInitRoute(
 func (i *InitRoute) InitRouting(cfg *config.Config) (*echo.Echo, error) {
 	e := echo.New()
 
-	cookieDomain := ""
-	if cfg.Env == "prd" {
-		cookieDomain = "." + cfg.AppDomain
-	}
+	// cookieDomain := ""
+	// if cfg.Env == "prd" {
+	// 	cookieDomain = "." + cfg.AppDomain
+	// }
 
 	// middleware
 	e.Use(
 		middleware.Logger(),
 		middleware.Recover(),
 		middleware.CORSWithConfig(middleware.CORSConfig{
-			AllowOrigins:     []string{cfg.FrontURL, cfg.LocalFrontURL, cfg.ProFrontURL},
+			AllowOrigins:     []string{cfg.FrontURL, cfg.LocalFrontURL},
 			AllowCredentials: true,
 		}),
-		middleware.CSRFWithConfig(middleware.CSRFConfig{
-			CookiePath:     "/",
-			CookieSecure:   true,
-			CookieDomain:   cookieDomain,
-			CookieSameSite: http.SameSiteNoneMode,
-			Skipper: func(c echo.Context) bool {
-				if strings.Contains(c.Request().URL.Path, "/healthcheck") {
-					return true
-				}
-				if strings.Contains(c.Request().URL.Path, "/playground") {
-					return true
-				}
-				if strings.Contains(c.Request().URL.Path, "/query") {
-					return true
-				}
-				return false
-			},
-		}),
+		// middleware.CSRFWithConfig(middleware.CSRFConfig{
+		// 	CookiePath:     "/",
+		// 	CookieSecure:   true,
+		// 	CookieDomain:   cookieDomain,
+		// 	CookieSameSite: http.SameSiteNoneMode,
+		// 	Skipper: func(c echo.Context) bool {
+		// 		if strings.Contains(c.Request().URL.Path, "/healthcheck") {
+		// 			return true
+		// 		}
+		// 		if strings.Contains(c.Request().URL.Path, "/playground") {
+		// 			return true
+		// 		}
+		// 		if strings.Contains(c.Request().URL.Path, "/query") {
+		// 			return true
+		// 		}
+		// 		return false
+		// 	},
+		// }),
 		i.Am.AuthMiddleware,
 	)
 
@@ -86,7 +85,7 @@ func (i *InitRoute) InitRouting(cfg *config.Config) (*echo.Echo, error) {
 
 	// Route
 	e.GET("/healthcheck", func(c echo.Context) error {
-		return c.String(http.StatusOK, "New deployment test")
+		return c.String(http.StatusOK, "New deployment")
 	})
 	e.GET("/csrf-cookie", i.Ch.CsrfHandler())
 	e.POST("/login", i.Lh.LoginHandler())
