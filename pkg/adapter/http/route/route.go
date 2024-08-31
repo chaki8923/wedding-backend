@@ -52,10 +52,10 @@ func (i *InitRoute) InitRouting(cfg *config.Config) (*echo.Echo, error) {
 	e.Use(
 		middleware.Logger(),
 		middleware.Recover(),
-		// middleware.CORSWithConfig(middleware.CORSConfig{
-		// 	AllowOrigins:     []string{cfg.FrontURL, cfg.LocalFrontURL},
-		// 	AllowCredentials: true,
-		// }),
+		middleware.CORSWithConfig(middleware.CORSConfig{
+			AllowOrigins:     []string{cfg.FrontURL, cfg.LocalFrontURL},
+			AllowCredentials: true,
+		}),
 		// middleware.CSRFWithConfig(middleware.CSRFConfig{
 		// 	CookiePath:     "/",
 		// 	CookieSecure:   true,
