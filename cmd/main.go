@@ -46,9 +46,12 @@ func main() {
 	// DI
 	//DBを注入。
 	mr := infra.NewMessageRepository(db)
-	ir := infra.NewInvitationRepository(db,s3Client, "weddingnet")
-	ivr := infra.NewInviteeRepository(db,s3Client, "weddingnet")
-	upr := infra.NewUploadRepository(db,s3Client, "weddingnet")
+	// ir := infra.NewInvitationRepository(db,s3Client, "weddingnet")
+	// ivr := infra.NewInviteeRepository(db,s3Client, "weddingnet")
+	// upr := infra.NewUploadRepository(db,s3Client, "weddingnet")
+	ir := infra.NewInvitationRepository(db,s3Client, "wedding-gate")
+	ivr := infra.NewInviteeRepository(db,s3Client, "wedding-gate")
+	upr := infra.NewUploadRepository(db,s3Client, "wedding-gate")
 	ur := infra.NewUserRepository(db, c)
 	sr := infra.NewSendMailRepository(db)
 	agr := infra.NewAllergyRepository(db)

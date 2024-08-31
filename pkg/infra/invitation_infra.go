@@ -138,7 +138,8 @@ func (i *invitationRepository) UploadFileToS3(ctx context.Context, file_url grap
 
 	fileKey := "uploads/" + file_url.Filename
 	uploadInput := &s3.PutObjectInput{
-		Bucket: aws.String("weddingnet"),
+		// Bucket: aws.String("weddingnet"),
+		Bucket: aws.String("wedding-gate"),
 		Key:    aws.String(fileKey),
 		Body:   tempFile,
 	}
@@ -148,7 +149,8 @@ func (i *invitationRepository) UploadFileToS3(ctx context.Context, file_url grap
 	}
 
 	// ファイルのアップロード後の URL を返す
-	fileUrl := "https://weddingnet.s3-ap-northeast-1.amazonaws.com/" + fileKey
+	// fileUrl := "https://weddingnet.s3-ap-northeast-1.amazonaws.com/" + fileKey
+	fileUrl := "https://wedding-gate.s3-ap-northeast-1.amazonaws.com/" + fileKey
 	log.Printf("file_url %s", fileUrl)
 	return fileUrl, nil
 }
