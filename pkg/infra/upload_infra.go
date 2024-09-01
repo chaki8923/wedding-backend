@@ -95,7 +95,7 @@ func (u *updRepository) UploadFileToS3(ctx context.Context, file_url graphql.Upl
 	}
 
 	// ファイルのアップロード後の URL を返す
-	// fileUrl := "https://.s3-ap-northeast-1.amazonaws.com/" + fileKey
+	// fileUrl := "https://weddingnet.s3-ap-northeast-1.amazonaws.com/" + fileKey
 	fileUrl := "https://wedding-gate.s3-ap-northeast-1.amazonaws.com/" + fileKey
 	log.Printf("file_url %s", fileUrl)
 	return fileUrl, nil
