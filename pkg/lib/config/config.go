@@ -22,8 +22,8 @@ type Config struct {
 	EncryptKey string `env:"API_ENCRYPT_KEY" envDefault:"passwordpassword"`
 	JwtSecret  string `env:"API_JWT_SECRET" envDefault:"secret"`
 	SentryDsn  string `env:"API_SENTRY_DSN" envDefault:"https://xxxxxxxx"`
-	AwsAccessKey  string `env:"AWS_ACCESS_KEY" envDefault:"aaaaaaa"`
-	AwsSecretKey  string `env:"AWS_SECRET_KEY" envDefault:"bbbbbb"`
+	AwsAccessKey  string `env:"AWS_ACCESS_KEY"`
+	AwsSecretKey  string `env:"AWS_SECRET_KEY"`
 	GoogleAccount  string `env:"GOOGLE_ACCOUNT" envDefault:"bbbbbb"`
 	GoogleApiKey  string `env:"GOOGLE_API_KEY" envDefault:"bbbbbb"`
 }

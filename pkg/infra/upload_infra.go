@@ -12,10 +12,10 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"log"
-	"github.com/chaki8923/wedding-backend/pkg/lib/config"
+	// "github.com/chaki8923/wedding-backend/pkg/lib/config"
 	"os"
 	"io"
-	"github.com/aws/aws-sdk-go/aws/credentials"
+	// "github.com/aws/aws-sdk-go/aws/credentials"
 )
 
 type updRepository struct {
@@ -48,10 +48,10 @@ func (u *updRepository) UploadFileToS3(ctx context.Context, file_url graphql.Upl
 		return "", fmt.Errorf("failed to create temporary file: %w", err)
 	}
 
-	cfg, err := config.New()
-	if err != nil {
-		return "", fmt.Errorf("failed to load config: %w", err)
-	}
+	// cfg, err := config.New()
+	// if err != nil {
+	// 	return "", fmt.Errorf("failed to load config: %w", err)
+	// }
 
 	// ファイルを一時ファイルに書き込む
 	written, err := io.Copy(tempFile, file_url.File)
@@ -69,16 +69,16 @@ func (u *updRepository) UploadFileToS3(ctx context.Context, file_url graphql.Upl
 
 	defer tempFile.Close()
 
-	credential := credentials.NewStaticCredentials(
-		cfg.AwsAccessKey,
-		cfg.AwsSecretKey,
-		"",
-	)
+	// credential := credentials.NewStaticCredentials(
+	// 	cfg.AwsAccessKey,
+	// 	cfg.AwsSecretKey,
+	// 	"",
+	// )
 
 	// ファイルを S3 にアップロードする処理
 	sess := session.Must(session.NewSession(&aws.Config{
 		Region:      aws.String("ap-northeast-1"),
-		Credentials: credential,
+		// Credentials: credential,
 	}))
 	uploader := s3.New(sess)
 
