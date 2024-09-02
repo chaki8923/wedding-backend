@@ -13,10 +13,10 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 	"log"
 	"time"
-	"github.com/chaki8923/wedding-backend/pkg/lib/config"
+	// "github.com/chaki8923/wedding-backend/pkg/lib/config"
 	"os"
 	"io"
-	"github.com/aws/aws-sdk-go/aws/credentials"
+	// "github.com/aws/aws-sdk-go/aws/credentials"
 )
 
 type inviteeRepository struct {
@@ -173,10 +173,10 @@ func (i *inviteeRepository) UploadFileToS3(ctx context.Context, file_url graphql
 		return "", fmt.Errorf("failed to create temporary file: %w", err)
 	}
 
-	cfg, err := config.New()
-	if err != nil {
-		return "", fmt.Errorf("failed to load config: %w", err)
-	}
+	// cfg, err := config.New()
+	// if err != nil {
+	// 	return "", fmt.Errorf("failed to load config: %w", err)
+	// }
 
 	// ファイルを一時ファイルに書き込む
 	written, err := io.Copy(tempFile, file_url.File)
@@ -194,22 +194,23 @@ func (i *inviteeRepository) UploadFileToS3(ctx context.Context, file_url graphql
 
 	defer tempFile.Close()
 
-	credential := credentials.NewStaticCredentials(
-		cfg.AwsAccessKey,
-		cfg.AwsSecretKey,
-		"",
-	)
+	// credential := credentials.NewStaticCredentials(
+	// 	cfg.AwsAccessKey,
+	// 	cfg.AwsSecretKey,
+	// 	"",
+	// )
 
 	// ファイルを S3 にアップロードする処理
 	sess := session.Must(session.NewSession(&aws.Config{
 		Region:      aws.String("ap-northeast-1"),
-		Credentials: credential,
+		// Credentials: credential,
 	}))
 	uploader := s3.New(sess)
 
 	fileKey := "invitee/" + file_url.Filename
 	uploadInput := &s3.PutObjectInput{
-		Bucket: aws.String("weddingnet"),
+		// Bucket: aws.String("weddingnet"),
+		Bucket: aws.String("wedding-gate"),
 		Key:    aws.String(fileKey),
 		Body:   tempFile,
 	}
@@ -219,7 +220,8 @@ func (i *inviteeRepository) UploadFileToS3(ctx context.Context, file_url graphql
 	}
 
 	// ファイルのアップロード後の URL を返す
-	fileUrl := "https://weddingnet.s3-ap-northeast-1.amazonaws.com/" + fileKey
+	// fileUrl := "https://weddingnet.s3-ap-northeast-1.amazonaws.com/" + fileKey
+	fileUrl := "https://wedding-gate.s3-ap-northeast-1.amazonaws.com/" + fileKey
 	log.Printf("file_url %s", fileUrl)
 	return fileUrl, nil
 }

@@ -12,8 +12,8 @@ type Config struct {
 	Env        string `env:"API_ENV" envDefault:"dev"`
 	Port       string `env:"API_PORT" envDefault:"8080"`
 	ProFrontURL   string `env:"PRO_FRONT_URL" envDefault:"https://front.wedding-hackathon.com/"`
-	FrontURL   string `env:"API_FRONT_URL" envDefault:"https://localhost:3443"`
-	LocalFrontURL   string `env:"API_FRONT_URL" envDefault:"http://localhost:3000"`
+	FrontURL   string `env:"API_FRONT_URL" envDefault:"https://localhost:3443/"`
+	LocalFrontURL   string `env:"API_FRONT_URL" envDefault:"http://localhost:3000/"`
 	DBHost     string `env:"API_DB_HOST" envDefault:"172.30.0.3"`
 	DBName     string `env:"API_DB_NAME" envDefault:"golang"`
 	DBUser     string `env:"API_DB_USER" envDefault:"root"`
@@ -22,8 +22,8 @@ type Config struct {
 	EncryptKey string `env:"API_ENCRYPT_KEY" envDefault:"passwordpassword"`
 	JwtSecret  string `env:"API_JWT_SECRET" envDefault:"secret"`
 	SentryDsn  string `env:"API_SENTRY_DSN" envDefault:"https://xxxxxxxx"`
-	AwsAccessKey  string `env:"AWS_ACCESS_KEY" envDefault:"aaaaaaa"`
-	AwsSecretKey  string `env:"AWS_SECRET_KEY" envDefault:"bbbbbb"`
+	AwsAccessKey  string `env:"AWS_ACCESS_KEY"`
+	AwsSecretKey  string `env:"AWS_SECRET_KEY"`
 	GoogleAccount  string `env:"GOOGLE_ACCOUNT" envDefault:"bbbbbb"`
 	GoogleApiKey  string `env:"GOOGLE_API_KEY" envDefault:"bbbbbb"`
 }
