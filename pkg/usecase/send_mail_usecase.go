@@ -57,30 +57,24 @@ func (m *MailUseCase) SendMail(to *string, from *string, subject *string, body *
 			}
 
 			recipientName := invitee.FamilyKj + " " + invitee.FirstKj
-		    customBody := fmt.Sprintf("%s 様へ\n\n%s", recipientName)
-			inviteeLink := "https://localhost:3443/invitee_detail?uuid=" + invitee.UUID + "&inv_id=" + *body
+			// inviteeLink := "https://localhost:3443/invitee_detail?uuid=" + invitee.UUID + "&inv_id=" + *body
 			// 本番
-			// inviteeLink := "https://front.wedding-hackathon.com/invitee_detail?uuid=" + invitee.UUID + "&inv_id=" + *body
+			inviteeLink := "https://front.wedding-hackathon.com/invitee_detail?uuid=" + invitee.UUID + "&inv_id=" + *body
 
-			mailMessage := []byte("To: " + recipient + "\r\n" +
-					"Subject: " + *subject + "\r\n" +
-					"\r\n" +
-					customBody + 
-					"\r\n" +
-					"以下のリンクより出欠を更新してください" +
-					"\r\n" +
-					inviteeLink +
-					"\r\n")
-				log.Printf("Sending email to: %s\n", recipient)
+			mailMessage := fmt.Sprintf("To: %s\r\nSubject: %s\r\n\r\n%s 様へ\r\n\r\n以下のリンクより出欠を更新してください\r\n%s\r\n",
+			recipient, *subject, recipientName, inviteeLink)
+
+			log.Printf("Sending email to: %s\n", recipient)
+
 			// SMTPサーバ接続
 			auth := smtp.PlainAuth("", cfg.GoogleAccount, cfg.GoogleApiKey, "smtp.gmail.com")
 
 			// メール送信
-			err = smtp.SendMail("smtp.gmail.com:587", auth, cfg.GoogleAccount, []string{recipient}, mailMessage)
+			err = smtp.SendMail("smtp.gmail.com:587", auth, cfg.GoogleAccount, []string{recipient}, []byte(mailMessage))
 			if err != nil {
 				return nil, fmt.Errorf("failed to send email to %s: %w", recipient, err)
 			}
-	}
+		}
 
 	return &model.SendMail{
 		To:      *to,
