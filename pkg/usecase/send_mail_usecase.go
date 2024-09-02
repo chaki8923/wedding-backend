@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/chaki8923/wedding-backend/pkg/domain/model"
 	"github.com/chaki8923/wedding-backend/pkg/domain/repository"
-	"github.com/chaki8923/wedding-backend/pkg/lib/config"
+	// "github.com/chaki8923/wedding-backend/pkg/lib/config"
 	"strings"
 	"log"
 )
@@ -36,10 +36,10 @@ func (m *MailUseCase) SendMail(to *string, from *string, subject *string, body *
 		return nil, errors.New("one or more parameters are nil")
 	}
 
-	cfg, err := config.New()
-	if err != nil {
-		return nil, fmt.Errorf("failed to load config: %w", err)
-	}
+	// cfg, err := config.New()
+	// if err != nil {
+	// 	return nil, fmt.Errorf("failed to load config: %w", err)
+	// }
 
 	// 複数の宛先に対応するためにカンマで分割
 	recipients := strings.Split(*to, ",")
@@ -67,10 +67,10 @@ func (m *MailUseCase) SendMail(to *string, from *string, subject *string, body *
 			log.Printf("Sending email to: %s\n", recipient)
 
 			// SMTPサーバ接続
-			auth := smtp.PlainAuth("", cfg.GoogleAccount, cfg.GoogleApiKey, "smtp.gmail.com")
+			auth := smtp.PlainAuth("", "konkuriitonouenokareha128@gmail.com", "watobiceuwckrylb", "smtp.gmail.com")
 
 			// メール送信
-			err = smtp.SendMail("smtp.gmail.com:587", auth, cfg.GoogleAccount, []string{recipient}, []byte(mailMessage))
+			err = smtp.SendMail("smtp.gmail.com:587", auth, "konkuriitonouenokareha128@gmail.com", []string{recipient}, []byte(mailMessage))
 			if err != nil {
 				return nil, fmt.Errorf("failed to send email to %s: %w", recipient, err)
 			}
