@@ -60,9 +60,11 @@ func (m *MailUseCase) SendMail(to *string, from *string, subject *string, body *
 			// inviteeLink := "https://localhost:3443/invitee_detail?uuid=" + invitee.UUID + "&inv_id=" + *body
 			// 本番
 			inviteeLink := "https://front.wedding-hackathon.com/invitee_detail?uuid=" + invitee.UUID + "&inv_id=" + *body
+			frontLink := "https://front.wedding-hackathon.com/sign_up"
 
-			mailMessage := fmt.Sprintf("To: %s\r\nSubject: %s\r\n\r\n%s 様へ\r\n\r\n以下のリンクより出欠を更新してください\r\n%s\r\n",
-			recipient, *subject, recipientName, inviteeLink)
+			expiryDate := "2024-09-30" // 有効期限の日付（例）
+			mailMessage := fmt.Sprintf("To: %s\r\nSubject: %s\r\n\r\n%s 様へ\r\n\r\nこの度、チャーキチャーキちゃんは結婚することになりました\r\n\r\n結婚式に招待したいのでまずは新規登録してください\r\n%s\r\n\r\nその後以下のリンクより出欠の更新を行ってください。\r\n%s\r\n\r\n有効期限: %s\r\n",
+			recipient, *subject, recipientName, frontLink,inviteeLink, expiryDate)
 
 			log.Printf("Sending email to: %s\n", recipient)
 
