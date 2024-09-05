@@ -165,7 +165,8 @@ func (i *invitationRepository) DeleteInvitation(id string) (*model.Invitation, e
 	  // S3の画像を削除
     if record.FileURL != "" {
 			_, err := i.s3Client.DeleteObject(&s3.DeleteObjectInput{
-					Bucket: aws.String(i.bucket),
+					// Bucket: aws.String("weddingnet"),
+					Bucket: aws.String("wedding-gate"),
 					Key:    aws.String(record.FileURL),
 			})
 			if err != nil {
@@ -173,7 +174,8 @@ func (i *invitationRepository) DeleteInvitation(id string) (*model.Invitation, e
 			}
 
 			err = i.s3Client.WaitUntilObjectNotExists(&s3.HeadObjectInput{
-					Bucket: aws.String(i.bucket),
+					// Bucket: aws.String("weddingnet"),
+					Bucket: aws.String("wedding-gate"),
 					Key:    aws.String(record.FileURL),
 			})
 			if err != nil {
